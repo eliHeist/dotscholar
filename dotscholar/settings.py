@@ -22,8 +22,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 INTERNAL_IPS = env.list('INTERNAL_IPS')
 
 # CORS: Requires django-cors-headers
-# CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+CORS_ALLOW_ALL_ORIGINS = True if DEBUG else False
 
 
 # Application definition
@@ -35,6 +35,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    "django_htmx",
+    "django_unicorn",
+    "django_cotton",
+    "widget_tweaks",
 ]
 INSTALLED_APPS += getAppNames()
 
@@ -46,6 +51,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "dotscholar.urls"
@@ -65,6 +72,11 @@ TEMPLATES = [
         },
     },
 ]
+
+# append each apps templates folder to APP_DIRS, use the getAppNames() and replace the . with a /
+for app in getAppNames():
+    folder = app.replace('.','/')
+    TEMPLATES[0]['DIRS'].append(BASE_DIR / f'{folder}/templates')
 
 WSGI_APPLICATION = "dotscholar.wsgi.application"
 
@@ -107,11 +119,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
+TIME_ZONE = "Africa/Kampala"
 USE_I18N = True
-
 USE_TZ = True
 
 
