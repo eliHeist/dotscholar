@@ -11,6 +11,7 @@ dependencies = [
     "django-cotton>=2.1.1",
     "django-htmx>=1.23.0",
     "django-ninja>=1.4.1",
+    "django-unicorn>=0.62.0",
     "django-widget-tweaks>=1.5.0",
     "djangosetupheist>=0.6.2",
     "fpdf2>=2.8.3",
