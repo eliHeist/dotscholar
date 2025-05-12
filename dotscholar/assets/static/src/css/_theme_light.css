@@ -1,0 +1,44 @@
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+
+    --color-base-100: oklch(100% 0 0); /* #ffffff */
+    --color-base-200: oklch(96% 0.007 95); /* #f1f1e7 */
+    --color-base-300: oklch(92% 0.007 95); /* #f4f4ec */
+    --color-base-content: oklch(22% 0.005 278); /* #34332f */
+  
+    --color-primary: oklch(91% 0.11 83); /* #ffed8b */
+    --color-primary-content: oklch(20% 0.09 83); /* #332900 */
+  
+    --color-secondary: oklch(7% 0.02 264.29); /* #10181d */
+    --color-secondary-content: oklch(95% 0.005 280); /* Soft Gray for contrast */
+  
+    --color-accent: oklch(72% 0.14 190); /* Cool Teal for accent */
+    --color-accent-content: oklch(22% 0.08 190); /* Dark Teal contrast */
+  
+    --color-neutral: oklch(7% 0.02 264); /* #10181d */
+    --color-neutral-content: oklch(90% 0.01 280); /* Soft Gray contrast */
+  
+    --color-info: oklch(80% 0.13 220); /* Light Blue */
+    --color-info-content: oklch(25% 0.06 220); /* Deep Blue contrast */
+  
+    --color-success: oklch(70% 0.22 145); /* #9fefb0 */
+    --color-success-content: oklch(25% 0.11 145); /* #1c4b1f */
+  
+    --color-warning: oklch(80% 0.19 78); /* #ffc69d */
+    --color-warning-content: oklch(40% 0.15 78); /* #66391c */
+  
+    --color-error: oklch(65% 0.22 28); /* Reddish tone */
+    --color-error-content: oklch(25% 0.09 15); /* Deep Red for errors */
+  
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0.5rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+}
