@@ -1,7 +1,9 @@
 from django.urls import path, include
 
 app_configs = [
-	{ 'app_name': 'misc.staticpages', 'url': 'misc/staticpages/', 'namespace': 'staticpages' },
+	{ 'app_name': 'accounts', 'url': 'accounts/', 'namespace': 'accounts' },
+
+	{ 'app_name': 'misc.staticpages', 'url': '', 'namespace': 'staticpages' },
 
 	{ 'app_name': 'api', 'url': 'x_api/', 'namespace': 'x_api' },
 
