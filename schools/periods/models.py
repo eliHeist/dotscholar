@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from schools.schools.models import School
 
@@ -17,3 +18,17 @@ class Year(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Day(models.Model):
+    date = models.DateField()
+    # term = models.ForeignKey("app.Model", verbose_name=_(""), on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("Day")
+        verbose_name_plural = _("Days")
+
+    def __str__(self):
+        return self.name
+
+
