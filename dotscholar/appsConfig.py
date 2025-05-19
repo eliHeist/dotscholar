@@ -1,6 +1,16 @@
 from django.urls import path, include
 
 app_configs = [
+	{ 'app_name': 'schools', 'url': 'schools/', 'namespace': 'schools' },
+
+	{ 'app_name': 'academics.classLevels', 'url': 'academics/classLevels/', 'namespace': 'classLevels' },
+
+	{ 'app_name': 'academics.classes', 'url': 'academics/classes/', 'namespace': 'classes' },
+
+	{ 'app_name': 'people.parents', 'url': 'people/parents/', 'namespace': 'parents' },
+
+	{ 'app_name': 'people.students', 'url': 'people/students/', 'namespace': 'students' },
+
 	{ 'app_name': 'accounts', 'url': 'accounts/', 'namespace': 'accounts' },
 
 	{ 'app_name': 'misc.staticpages', 'url': '', 'namespace': 'staticpages' },
