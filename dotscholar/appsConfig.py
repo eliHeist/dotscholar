@@ -7,8 +7,6 @@ app_configs = [
 
 	{ 'app_name': 'schools.schools', 'url': 'schools/schools/', 'namespace': 'schools' },
 
-	{ 'app_name': 'academics.classLevels', 'url': 'academics/classLevels/', 'namespace': 'classLevels' },
-
 	{ 'app_name': 'academics.classes', 'url': 'academics/classes/', 'namespace': 'classes' },
 
 	{ 'app_name': 'people.parents', 'url': 'people/parents/', 'namespace': 'parents' },
