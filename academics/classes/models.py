@@ -7,10 +7,3 @@ class Class(models.Model):
     def __str__(self):
         return f"{self.name} ({self.code})"
 
-
-class Stream(models.Model):
-    name = models.CharField(max_length=50)
-    class_name = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='streams')
-
-    def __str__(self):
-        return f"{self.name} ({self.code})"
