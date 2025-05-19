@@ -19,8 +19,8 @@ class Student(models.Model):
         verbose_name_plural = _("Students")
     
     def get_full_name(self):
-        return f""
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.get_full_name()
 
