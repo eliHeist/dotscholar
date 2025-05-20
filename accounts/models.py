@@ -69,6 +69,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    school = models.ForeignKey(
+        'schools.schools.School',
+        on_delete=models.CASCADE,
+        related_name='users',
+        null=True,
+        blank=True
+    )
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
