@@ -11,9 +11,9 @@ class Year(models.Model):
     class Meta:
         ordering = ["-year"]
         get_latest_by = "year"
-        order_with_respect_to = 'school'
-        verbose_name = "year"
-        verbose_name_plural = "years"
+        # order_with_respect_to = 'school'
+        verbose_name = "Academic Year"
+        verbose_name_plural = "Academic Years"
         unique_together = ["year", "school"]
 
     def __str__(self):

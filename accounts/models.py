@@ -15,7 +15,7 @@ from django.contrib.auth.models import Permission
 class UserManager(BaseUserManager):
     """Class to manage the creation of user objects"""
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, email, password=None):
         """Creates and returns a user object
         Arguments:
         username: the string to use as username
@@ -30,8 +30,6 @@ class UserManager(BaseUserManager):
         Return:
             A user object
         """
-        if not username:
-            raise ValueError('Users must have a username')
 
         if not email:
             raise ValueError('Users must have an email address')
@@ -39,13 +37,13 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError('Users must have a password')
 
-        user = self.model(username=username,email = self.normalize_email(email),)
+        user = self.model(email = self.normalize_email(email),)
         user.set_password(password)
         user.is_active=True
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password):
+    def create_superuser(self, email, password):
         """Creates an admin user object
         Arguments:
         username: the string to use as username
@@ -55,7 +53,7 @@ class UserManager(BaseUserManager):
         Return:
             A user object
         """
-        user = self.create_user(username, email, password=password)
+        user = self.create_user(email, password=password)
         user.is_admin=True
         user.is_superuser=True
         user.save(using=self._db)
@@ -63,22 +61,22 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField(verbose_name='Email address', max_length=255,unique=True)
+    # username = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    email = models.EmailField(verbose_name='Email address', max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     school = models.ForeignKey(
-        'schools.schools.School',
+        'schools.School',
         on_delete=models.CASCADE,
         related_name='users',
         null=True,
         blank=True
     )
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = ['email']
 
     objects = UserManager()
 
@@ -90,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.save()
 
     def get_full_name(self):
-        full_name = "%s %s" % (self.first_name, self.last_name)
+        full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
 
     def get_short_name(self):

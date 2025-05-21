@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 class Subject(models.Model):
     name = models.CharField(_("Name"), max_length=50)
     abbreviation = models.CharField(_("Abbreviation"), max_length=4)
-    classes = models.ManyToManyField("academics.classes.Class", verbose_name=_("Classes"))
+    classes = models.ManyToManyField("classes.Class", verbose_name=_("Classes"))
 
     class Meta:
         verbose_name = _("Subject")

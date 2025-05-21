@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 class Stream(models.Model):
 
     name = models.CharField(_("Name"), max_length=50)
-    school = models.ForeignKey("schools.schools.School", verbose_name=_("School"), on_delete=models.CASCADE)
-    current_class = models.ForeignKey("academics.classes.Class", verbose_name=_("Class"), on_delete=models.CASCADE)
+    school = models.ForeignKey("schools.School", verbose_name=_("School"), on_delete=models.CASCADE)
+    current_class = models.ForeignKey("classes.Class", verbose_name=_("Class"), on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Stream")

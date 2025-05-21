@@ -1,9 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from schools.schools.models import School
+from academics.subjects.models import Paper
+
 # Create your models here.
 class Student(models.Model):
-    school = models.ForeignKey("schools.schools.School", verbose_name=_(""), on_delete=models.CASCADE)
+    school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="students")
     date_added = models.DateField(_("Date added to system"), auto_now_add=True)
 
     first_name = models.CharField(_("First Name"), max_length=25)    
@@ -12,7 +15,7 @@ class Student(models.Model):
     gender = models.CharField(_("Gender"), max_length=5)
     payment_code = models.CharField(_("Payment Code"), max_length=50)
     
-    current_optional_papers = models.ManyToManyField('academics.subjects.Paper', _("Optional Papers"), blank=True)
+    current_optional_papers = models.ManyToManyField(Paper, verbose_name=_("Optional Papers"), blank=True)
 
     class Meta:
         verbose_name = _("Student")
