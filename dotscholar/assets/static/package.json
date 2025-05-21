@@ -22,6 +22,7 @@
     "alpinejs": "^3.14.9",
     "daisyui": "^5.0.35",
     "htmx.org": "^1.9.12",
+    "lucide-static": "^0.511.0",
     "tailwindcss": "^4.1.6"
   }
 }

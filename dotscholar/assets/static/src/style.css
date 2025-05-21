@@ -8,3 +8,6 @@
 }
 
 @import "./css/_theme_light.css";
+
+@import "lucide-static/font/lucide.css";
+
