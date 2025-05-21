@@ -1,0 +1,51 @@
+<c-layout title="Student List">
+    <div class="overflow-x-auto">
+        <table class="table table-pin-rows">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th>
+                        <label>
+                            <input type="checkbox" class="checkbox" />
+                        </label>
+                    </th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <th>
+                        <label>
+                            <input type="checkbox" class="checkbox" />
+                        </label>
+                    </th>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div>
+                                <div class="font-bold">{{ student.get_full_name }}</div>
+                                <div class="text-sm opacity-50">{{ student.get_gender_display }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        S.{{ student.current_stream.current_class.number }} 
+                        {{ student.current_stream.name }}
+                        <br />
+                        <span class="badge badge-ghost badge-sm"
+                            >Desktop Support Technician</span
+                        >
+                    </td>
+                    <td>Purple</td>
+                    <th>
+                        <button class="btn btn-ghost btn-xs">details</button>
+                    </th>
+                </tr>
+                {% empty %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</c-layout>
