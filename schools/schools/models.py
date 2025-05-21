@@ -6,7 +6,7 @@ class School(models.Model):
 
     name = models.CharField(_("Name"), max_length=50)
     registration_number = models.CharField(_("Reg no."), max_length=50, unique=True)
-    logo = models.FileField(_("Logo"), upload_to='school_logos', max_length=100)
+    logo = models.FileField(_("Logo"), upload_to='school_logos', max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = _("School")
