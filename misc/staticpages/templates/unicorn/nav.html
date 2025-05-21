@@ -1,0 +1,58 @@
+<div x-data="{
+    open: false,
+    findActiveStatus(element, equal=false){
+        let path = window.location.pathname;
+        let url = element.getAttribute('href');
+        if (equal && path === url) {
+            {% comment %} set the details open attribute to true {% endcomment %}
+            element.parentElement.parentElement.parentElement.setAttribute('open', true)
+            return true
+        }
+        if (path.startsWith(url) && !equal) {
+            {% comment %} set the details open attribute to true {% endcomment %}
+            element.parentElement.parentElement.parentElement.setAttribute('open', true)
+            return true
+        }
+        {% comment %} set the details open attribute to false {% endcomment %}
+        return false
+    },
+}">
+    <aside class="w-64 bg-white border-r p-4">
+        <h2 class="text-xl font-bold mb-6">
+            Dot <span class="font-normal">Scholar</span>
+        </h2>
+        <ul class="menu bg-base-200 rounded-box w-56">
+            {% for group in permitted_menu %}
+                <li>
+                    <details>
+                        <summary>
+                            <i class="{{ group.icon }}"></i>
+                            <span>{{ group.title }}</span>
+                        </summary>
+                        <ul>
+                            {% for link in group.links %}
+                                {% if link.equalsParam %}
+                                    <li>
+                                        <a href="{% url link.url %}" 
+                                            :class="findActiveStatus(this, true) ? 'text-primary' : ''">
+                                            <i class="icon-dot"></i>
+                                            {{ link.title }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="{% url link.url %}" 
+                                            :class="findActiveStatus(this) ? 'text-primary' : ''">
+                                            <i class="icon-dot"></i>
+                                            {{ link.title }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+</div>
