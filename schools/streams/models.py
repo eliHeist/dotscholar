@@ -7,7 +7,7 @@ from schools.schools.models import School
 # Create your models here.
 class Stream(models.Model):
 
-    name = models.CharField(_("Name"), max_length=50)
+    name = models.CharField(_("Name"), max_length=50, null=True, blank=True)
     school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE)
     current_class = models.ForeignKey(Class, verbose_name=_("Class"), on_delete=models.CASCADE)
 
@@ -16,5 +16,5 @@ class Stream(models.Model):
         verbose_name_plural = _("Streams")
 
     def __str__(self):
-        return self.name
+        return f"S.{self.current_class.number} {self.name}"
 
