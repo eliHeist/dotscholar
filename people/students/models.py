@@ -9,7 +9,7 @@ from schools.streams.models import Stream
 class GenderOptions(models.TextChoices):
     MALE = 'M', 'Male'
     FEMALE = 'F', 'Female'
-    
+
 class Student(models.Model):
     school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="students")
     date_added = models.DateField(_("Date added to system"), auto_now_add=True)
