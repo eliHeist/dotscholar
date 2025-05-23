@@ -1,8 +1,15 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
+
+class LevelChoices(models.TextChoices):
+    # PRIMARY = "P", _("Primary")
+    ORDINARY = "O", _("Ordinary")
+    ADVANCED = "A", _("Advanced")
+
 class Class(models.Model):
-    number = models.DecimalField(choices=[(i, str(i)) for i in range(1, 7)], unique=True, max_digits=1, decimal_places=0)
+    level = models.CharField(max_length=1, choices=LevelChoices.choices)
+    number = models.CharField(max_length=1, choices=[(str(i), str(i)) for i in range(1, 8)], unique=True)
 
     def __str__(self):
         return f"S.{self.number}"
