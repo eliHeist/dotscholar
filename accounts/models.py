@@ -74,6 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True
     )
+    profile = models.OneToOneField("UserProfile", verbose_name=_("Profile"), on_delete=models.CASCADE, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['email']
