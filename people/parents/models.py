@@ -1,5 +1,4 @@
 from django.db import models
-from people.students.models import Student
 from django.utils.translation import gettext_lazy as _
 
 
@@ -10,9 +9,6 @@ class Parent(models.Model):
     phone = models.CharField(_("Phone"), max_length=15)
     phone_2 = models.CharField(_("Phone 2"), max_length=15, null=True, blank=True)
     address = models.CharField(max_length=255, verbose_name="Address")
-    students = models.ManyToManyField(Student, verbose_name=_("Students"))
-    
-    
     
     
     class Meta:
