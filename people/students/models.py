@@ -58,6 +58,7 @@ class StudentParent(models.Model):
     class Meta:
         verbose_name = _("StudentParent")
         verbose_name_plural = _("StudentParents")
+        unique_together = ("student", "parent")
 
     def __str__(self):
         return f"{self.title} of {self.student.get_full_name()} ({self.parent.full_name})"
