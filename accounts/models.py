@@ -70,12 +70,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     school = models.ForeignKey(
-        School,
+        School, 
         on_delete=models.CASCADE,
         related_name='users',
         null=True,
         blank=True
     )
+    _is_school_owner = models.BooleanField(default=False, verbose_name=_("Is School Owner"))
     profile = models.OneToOneField("UserProfile", verbose_name=_("Profile"), on_delete=models.CASCADE, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
