@@ -1,181 +1,217 @@
 O_level_subjects = {
     "456": {
         "subject": "Mathematics",
+        "abbreviation": "Math",
         "category": "Science",
         "papers": [{"number": "1", "name": "Mathematics"}]
     },
     "545": {
         "subject": "Chemistry",
+        "abbreviation": "Chem",
         "category": "Science",
-        "papers": [{"number": "1", "name": "Chemistry Paper 1"}, {"number": "2", "name": "Chemistry Paper 2"}, {"number": "3", "name": "Chemistry Practical"}]
+        "papers": [{"number": "1", "name": "Chemistry"}, {"number": "2", "name": "Chemistry"}, {"number": "3", "name": "Practical"}]
     },
     "273": {
         "subject": "Geography",
+        "abbreviation": "Geo",
         "category": "Art",
         "papers": [{"number": "1", "name": "Geography"}]
     },
     "553": {
         "subject": "Biology",
+        "abbreviation": "Bio",
         "category": "Science",
-        "papers": [{"number": "1", "name": "Biology Paper 1"}, {"number": "2", "name": "Biology Paper 2"}, {"number": "3", "name": "Biology Practical"}]
+        "papers": [{"number": "1", "name": "Biology"}, {"number": "2", "name": "Biology"}, {"number": "3", "name": "Practical"}]
     },
     "535": {
         "subject": "Physics",
+        "abbreviation": "Phy",
         "category": "Science",
-        "papers": [{"number": "1", "name": "Physics Paper 1"}, {"number": "2", "name": "Physics Paper 2"}, {"number": "3", "name": "Physics Practical"}]
+        "papers": [{"number": "1", "name": "Physics"}, {"number": "2", "name": "Physics"}, {"number": "3", "name": "Practical"}]
     },
     "612": {
         "subject": "Art",
+        "abbreviation": "Art",
         "category": "Art",
         "papers": [{"number": "1", "name": "Art History & Studio Technology"}, {"number": "2", "name": "Art Making"}]
     },
     "500": {
         "subject": "General Science",
+        "abbreviation": "GS",
         "category": "Science",
-        "papers": [{"number": "2", "name": "General Science Paper 2"}, {"number": "3", "name": "General Science Practical"}]
+        "papers": [{"number": "2", "name": "General Science"}, {"number": "3", "name": "Practical"}]
     },
     "621": {
         "subject": "Music",
+        "abbreviation": "Music",
         "category": "Art",
         "papers": [{"number": "1", "name": "Aural, Composition and Theory"}]
     },
     "840": {
         "subject": "ICT",
+        "abbreviation": "ICT",
         "category": "Science",
-        "papers": [{"number": "1", "name": "ICT Paper 1"}, {"number": "2", "name": "ICT Practical"}]
+        "papers": [{"number": "1", "name": "ICT"}, {"number": "2", "name": "Practical"}]
     },
     "527": {
         "subject": "Agriculture",
+        "abbreviation": "Agric",
         "category": "Science",
-        "papers": [{"number": "1", "name": "Agriculture Paper 1"}, {"number": "2", "name": "Agriculture Practical"}]
+        "papers": [{"number": "1", "name": "Agriculture"}, {"number": "2", "name": "Practical"}]
     },
     "223": {
         "subject": "Christian Religious Education",
+        "abbreviation": "CRE",
         "category": "Religion",
         "papers": [{"number": "1", "name": "Christian Religious Education"}]
     },
     "225": {
         "subject": "Islamic Religious Education",
+        "abbreviation": "IRE",
         "category": "Religion",
         "papers": [{"number": "1", "name": "Islamic Religious Education"}]
     },
     "336": {
         "subject": "Kiswahili",
+        "abbreviation": "Kiswahili",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Kiswahili Paper 1"}, {"number": "2", "name": "Kiswahili Paper 2"}]
+        "papers": [{"number": "1", "name": "Kiswahili"}, {"number": "2", "name": "Kiswahili"}]
     },
     "112": {
-        "subject": "English",
+        "subject": "English Language",
+        "abbreviation": "Eng",
         "category": "Language",
         "papers": [{"number": "1", "name": "English Language"}]
     },
     "241": {
-        "subject": "History",
+        "subject": "History & Political Education",
+        "abbreviation": "History",
         "category": "Art",
         "papers": [{"number": "1", "name": "History & Political Education"}]
     },
     "845": {
         "subject": "Entrepreneurship",
+        "abbreviation": "Ent",
         "category": "Art",
         "papers": [{"number": "1", "name": "Entrepreneurship"}]
     },
     "208": {
-        "subject": "Literature",
+        "subject": "Literature in English",
+        "abbreviation": "Lit",
         "category": "Art",
         "papers": [{"number": "1", "name": "Literature in English"}]
     },
     "745": {
         "subject": "Technology and Design",
+        "abbreviation": "Tech",
         "category": "Science",
-        "papers": [{"number": "1", "name": "Technology and Design Paper 1"}, {"number": "2", "name": "Technology and Design Paper 2"}]
+        "papers": [{"number": "1", "name": "Technology and Design"}, {"number": "2", "name": "Technology and Design"}]
     },
     "397": {
         "subject": "Ugandan Sign Language",
+        "abbreviation": "USL",
         "category": "Language",
         "papers": [{"number": "1", "name": "Ugandan Sign Language"}]
     },
     "662": {
         "subject": "Nutrition & Food Technology",
+        "abbreviation": "NFT",
         "category": "Science",
         "papers": [{"number": "1", "name": "Nutrition & Food Technology"}]
     },
     "301": {
         "subject": "Latin",
+        "abbreviation": "Latin",
         "category": "Language",
         "papers": [{"number": "1", "name": "Latin"}]
     },
     "305": {
         "subject": "Leb Acoli",
+        "abbreviation": "Acoli",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Leb Acoli Paper 1"}, {"number": "2", "name": "Leb Acoli Paper 2"}]
+        "papers": [{"number": "1", "name": "Leb Acoli"}, {"number": "2", "name": "Leb Acoli"}]
     },
     "315": {
         "subject": "Leblango",
+        "abbreviation": "Lango",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Leblango Paper 1"}, {"number": "2", "name": "Leblango Paper 2"}]
+        "papers": [{"number": "1", "name": "Leblango"}, {"number": "2", "name": "Leblango"}]
     },
     "325": {
         "subject": "LugbaraTi",
+        "abbreviation": "Lugbara",
         "category": "Language",
-        "papers": [{"number": "1", "name": "LugbaraTi Paper 1"}, {"number": "2", "name": "LugbaraTi Paper 2"}]
+        "papers": [{"number": "1", "name": "LugbaraTi"}, {"number": "2", "name": "LugbaraTi"}]
     },
     "335": {
         "subject": "Luganda",
+        "abbreviation": "Luganda",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Luganda Paper 1"}, {"number": "2", "name": "Luganda Paper 2"}]
+        "papers": [{"number": "1", "name": "Luganda"}, {"number": "2", "name": "Luganda"}]
     },
     "345": {
         "subject": "Runyankore/Rukiga",
+        "abbreviation": "Runyankore/Rukiga",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Runyankore/Rukiga Paper 1"}, {"number": "2", "name": "Runyankore/Rukiga Paper 2"}]
+        "papers": [{"number": "1", "name": "Runyankore/Rukiga"}, {"number": "2", "name": "Runyankore/Rukiga"}]
     },
     "355": {
         "subject": "Lusoga",
+        "abbreviation": "Lusoga",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Lusoga Paper 1"}, {"number": "2", "name": "Lusoga Paper 2"}]
+        "papers": [{"number": "1", "name": "Lusoga"}, {"number": "2", "name": "Lusoga"}]
     },
     "365": {
         "subject": "Ateso",
+        "abbreviation": "Ateso",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Ateso Paper 1"}, {"number": "2", "name": "Ateso Paper 2"}]
+        "papers": [{"number": "1", "name": "Ateso"}, {"number": "2", "name": "Ateso"}]
     },
     "375": {
         "subject": "Dhopadhola",
+        "abbreviation": "Dhopadhola",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Dhopadhola Paper 1"}, {"number": "2", "name": "Dhopadhola Paper 2"}]
+        "papers": [{"number": "1", "name": "Dhopadhola"}, {"number": "2", "name": "Dhopadhola"}]
     },
     "385": {
         "subject": "Runyoro/Rutooro",
+        "abbreviation": "Runyoro/Rutooro",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Runyoro/Rutooro Paper 1"}, {"number": "2", "name": "Runyoro/Rutooro Paper 2"}]
+        "papers": [{"number": "1", "name": "Runyoro/Rutooro"}, {"number": "2", "name": "Runyoro/Rutooro"}]
     },
     "395": {
         "subject": "Lumasaaba",
+        "abbreviation": "Lumasaaba",
         "category": "Language",
-        "papers": [{"number": "1", "name": "Lumasaaba Paper 1"}, {"number": "2", "name": "Lumasaaba Paper 2"}]
+        "papers": [{"number": "1", "name": "Lumasaaba"}, {"number": "2", "name": "Lumasaaba"}]
     },
     "337": {
         "subject": "Arabic",
+        "abbreviation": "Arabic",
         "category": "Language",
         "papers": [{"number": "1", "name": "Arabic"}]
     },
     "555": {
         "subject": "Physical Education",
+        "abbreviation": "PE",
         "category": "Science",
         "papers": [{"number": "1", "name": "Physical Education"}]
     },
     "309": {
         "subject": "German",
+        "abbreviation": "German",
         "category": "Language",
         "papers": [{"number": "1", "name": "German"}]
     },
     "314": {
         "subject": "French",
+        "abbreviation": "French",
         "category": "Language",
         "papers": [{"number": "1", "name": "French"}]
     },
     "396": {
         "subject": "Chinese",
+        "abbreviation": "Chinese",
         "category": "Language",
         "papers": [{"number": "1", "name": "Chinese"}]
     }
@@ -186,6 +222,7 @@ O_level_subjects = {
 A_level_subjects = {
     "P210": {
         "subject": "History",
+        "abbreviation": "Hist",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "National Movements & the New States"},
@@ -198,6 +235,7 @@ A_level_subjects = {
     },
     "P425": {
         "subject": "Principal Mathematics",
+        "abbreviation": "Math",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Principal Mathematics"},
@@ -206,6 +244,7 @@ A_level_subjects = {
     },
     "P220": {
         "subject": "Economics",
+        "abbreviation": "Econ",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Economics"},
@@ -214,6 +253,7 @@ A_level_subjects = {
     },
     "P525": {
         "subject": "Chemistry",
+        "abbreviation": "Chem",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Chemistry"},
@@ -223,6 +263,7 @@ A_level_subjects = {
     },
     "P250": {
         "subject": "Geography",
+        "abbreviation": "Geo",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Geography"},
@@ -232,6 +273,7 @@ A_level_subjects = {
     },
     "S101": {
         "subject": "General Paper",
+        "abbreviation": "GP",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "General Paper"}
@@ -239,6 +281,7 @@ A_level_subjects = {
     },
     "P235": {
         "subject": "Islamic Religious Education",
+        "abbreviation": "IRE",
         "category": "Religion",
         "papers": [
             {"number": "1", "name": "The Glorious Qur'an"},
@@ -249,6 +292,7 @@ A_level_subjects = {
     },
     "P620": {
         "subject": "Music",
+        "abbreviation": "Music",
         "category": "Art",
         "papers": [
             {"number": "2", "name": "Aural"},
@@ -258,6 +302,7 @@ A_level_subjects = {
     },
     "P510": {
         "subject": "Physics",
+        "abbreviation": "Phy",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Physics"},
@@ -267,6 +312,7 @@ A_level_subjects = {
     },
     "P310": {
         "subject": "Literature in English",
+        "abbreviation": "Lit",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Prose & Poetry"},
@@ -276,6 +322,7 @@ A_level_subjects = {
     },
     "P320": {
         "subject": "Fasihi ya Kiswahili",
+        "abbreviation": "Kiswahili",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Nathari na Ushairi"},
@@ -285,6 +332,7 @@ A_level_subjects = {
     },
     "P515": {
         "subject": "Agriculture Principles & Practices",
+        "abbreviation": "Agric",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Agriculture Principles & Practices"},
@@ -294,6 +342,7 @@ A_level_subjects = {
     },
     "S475": {
         "subject": "Subsidiary Mathematics",
+        "abbreviation": "Sub Math",
         "category": "Subsidiary",
         "papers": [
             {"number": "1", "name": "Subsidiary Mathematics"}
@@ -301,6 +350,7 @@ A_level_subjects = {
     },
     "S850": {
         "subject": "Subsidiary ICT",
+        "abbreviation": "Sub ICT",
         "category": "Subsidiary",
         "papers": [
             {"number": "1", "name": "Subsidiary ICT"},
@@ -310,6 +360,7 @@ A_level_subjects = {
     },
     "P330": {
         "subject": "French",
+        "abbreviation": "French",
         "category": "Language",
         "papers": [
             {"number": "2", "name": "Language & Reading Comprehension"},
@@ -319,6 +370,7 @@ A_level_subjects = {
     },
     "P340": {
         "subject": "German",
+        "abbreviation": "German",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Essay"},
@@ -328,6 +380,7 @@ A_level_subjects = {
     },
     "P370": {
         "subject": "Arabic",
+        "abbreviation": "Arabic",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar, Morphology & Composition"},
@@ -337,6 +390,7 @@ A_level_subjects = {
     },
     "P372": {
         "subject": "Chinese",
+        "abbreviation": "Chinese",
         "category": "Language",
         "papers": [
             {"number": "2", "name": "Chinese"}
@@ -344,6 +398,7 @@ A_level_subjects = {
     },
     "P230": {
         "subject": "Entrepreneurship Education",
+        "abbreviation": "Ent",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Entrepreneurship Education"},
@@ -353,6 +408,7 @@ A_level_subjects = {
     },
     "P360": {
         "subject": "Luganda",
+        "abbreviation": "Luganda",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -362,6 +418,7 @@ A_level_subjects = {
     },
     "P361": {
         "subject": "Leb Acoli",
+        "abbreviation": "Acoli",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -371,6 +428,7 @@ A_level_subjects = {
     },
     "P362": {
         "subject": "Leblango",
+        "abbreviation": "Lango",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -380,6 +438,7 @@ A_level_subjects = {
     },
     "P363": {
         "subject": "LugbaraTI",
+        "abbreviation": "Lugbara",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -389,6 +448,7 @@ A_level_subjects = {
     },
     "P364": {
         "subject": "Runyankore/Rukiga",
+        "abbreviation": "Runyankore/Rukiga",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -398,6 +458,7 @@ A_level_subjects = {
     },
     "P366": {
         "subject": "Lusoga",
+        "abbreviation": "Lusoga",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -407,6 +468,7 @@ A_level_subjects = {
     },
     "P367": {
         "subject": "Ateso",
+        "abbreviation": "Ateso",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -416,6 +478,7 @@ A_level_subjects = {
     },
     "P368": {
         "subject": "Dhopadhola",
+        "abbreviation": "Dhopadhola",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -425,6 +488,7 @@ A_level_subjects = {
     },
     "P369": {
         "subject": "Runyoro/Rutooro",
+        "abbreviation": "Runyoro/Rutooro",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -434,6 +498,7 @@ A_level_subjects = {
     },
     "P371": {
         "subject": "Lumasaba",
+        "abbreviation": "Lumasaba",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Grammar and Culture"},
@@ -443,6 +508,7 @@ A_level_subjects = {
     },
     "P640": {
         "subject": "Foods and Nutrition",
+        "abbreviation": "FN",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Foods and Nutrition"},
@@ -451,6 +517,7 @@ A_level_subjects = {
     },
     "P350": {
         "subject": "Latin",
+        "abbreviation": "Latin",
         "category": "Language",
         "papers": [
             {"number": "1", "name": "Prose Composition"},
@@ -460,6 +527,7 @@ A_level_subjects = {
     },
     "P720": {
         "subject": "Geometrical & Build. Drawing",
+        "abbreviation": "GeoBuild",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Geometrical & Build. Drawing"},
@@ -469,6 +537,7 @@ A_level_subjects = {
     },
     "P630": {
         "subject": "Clothing and Textiles",
+        "abbreviation": "Clothing & Textiles",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Clothing and Textiles"},
@@ -476,6 +545,7 @@ A_level_subjects = {
     },
     "P615": {
         "subject": "Art",
+        "abbreviation": "Art",
         "category": "Art",
         "papers": [
             {"number": "1", "name": "Drawing Painting from Nature & Still Life"},
@@ -487,6 +557,7 @@ A_level_subjects = {
     },
     "P740": {
         "subject": "Engineering Metal Work",
+        "abbreviation": "EngMet",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Engineering Metal Work"},
@@ -495,6 +566,7 @@ A_level_subjects = {
     },
     "P710": {
         "subject": "Geometrical & Mech. Drawing",
+        "abbreviation": "GeoMech",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Geometrical & Mech. Drawing"},
@@ -503,6 +575,7 @@ A_level_subjects = {
     },
     "P730": {
         "subject": "Woodwork",
+        "abbreviation": "Woodwork",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Woodwork"},
@@ -512,6 +585,7 @@ A_level_subjects = {
     },
     "P245": {
         "subject": "Christian Religious Education (CRE)",
+        "abbreviation": "CRE",
         "category": "Religion",
         "papers": [
             {"number": "1", "name": "The Old Testament"},
@@ -522,6 +596,7 @@ A_level_subjects = {
     },
     "P530": {
         "subject": "Biology",
+        "abbreviation": "Bio",
         "category": "Science",
         "papers": [
             {"number": "1", "name": "Biology"},
@@ -530,4 +605,5 @@ A_level_subjects = {
         ]
     }
 }
+
 
