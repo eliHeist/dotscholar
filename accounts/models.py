@@ -10,6 +10,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Permission
 
+from schools.schools.models import School
+
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -68,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     school = models.ForeignKey(
-        'schools.School',
+        School,
         on_delete=models.CASCADE,
         related_name='users',
         null=True,
