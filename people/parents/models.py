@@ -12,22 +12,7 @@ class Parent(models.Model):
     address = models.CharField(max_length=255, verbose_name="Address")
     students = models.ManyToManyField(Student, verbose_name=_("Students"))
     
-    relation_role = models.CharField(
-        max_length=50,
-        choices=[
-            ("father", _("Father")),
-            ("mother", _("Mother")),
-            ("guardian", _("Guardian")),
-            ("brother", _("Brother")),
-            ("sister", _("Sister")),
-            ("uncle", _("Uncle")),
-            ("aunt", _("Aunt")),
-            ("grandfather", _("Grandfather")),
-            ("grandmother", _("Grandmother")),
-            ("other", _("Other")),
-        ],
-        default="mother",
-    )
+    
     
     
     class Meta:

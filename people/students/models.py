@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from academics.subjects.models import Paper
+from people.parents.models import Parent
 from schools.schools.models import School
 from schools.streams.models import Stream
 
@@ -32,4 +33,33 @@ class Student(models.Model):
 
     def __str__(self):
         return self.get_full_name()
+
+
+class StudentParent(models.Model):
+
+    student = models.ForeignKey(Student, verbose_name=_("Student"), on_delete=models.CASCADE, related_name="parent_relations")
+    parent = models.ForeignKey(Parent, verbose_name=_("Parent"), on_delete=models.CASCADE, related_name="students_relations")
+    title = models.CharField(
+        max_length=50,
+        choices=[
+            ("father", _("Father")),
+            ("mother", _("Mother")),
+            ("guardian", _("Guardian")),
+            ("brother", _("Brother")),
+            ("sister", _("Sister")),
+            ("uncle", _("Uncle")),
+            ("aunt", _("Aunt")),
+            ("grandfather", _("Grandfather")),
+            ("grandmother", _("Grandmother")),
+        ],
+        default="mother",
+    )
+
+    class Meta:
+        verbose_name = _("StudentParent")
+        verbose_name_plural = _("StudentParents")
+
+    def __str__(self):
+        return f"{self.title} of {self.student.get_full_name()} ({self.parent.full_name})"
+
 
