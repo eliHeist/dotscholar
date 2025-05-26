@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from academics.classes.models import Class, LevelChoices
+from schools.schools.models import School
 
 # Create your models here.
 class Subject(models.Model):
@@ -14,13 +15,21 @@ class Subject(models.Model):
         choices=LevelChoices.choices,
     )
     classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="subjects", blank=True)
-    is_compulsory = models.BooleanField(_("Is Compulsory"), default=False)
     category = models.ForeignKey(
         "Category",
         verbose_name=_("Category"),
         on_delete=models.CASCADE,
         related_name="subjects",
         null=True,
+    )
+    is_base = models.BooleanField(_("Is Base"), default=False, help_text=_("Is this a base subject?"))
+    school = models.ForeignKey(
+        School,
+        verbose_name=_("School"),
+        on_delete=models.CASCADE,
+        related_name="subjects",
+        null=True,
+        blank=True,
     )
 
     class Meta:
