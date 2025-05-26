@@ -18,6 +18,12 @@ class School(models.Model):
         null=True,
         blank=True
     )
+    tier = models.ForeignKey(
+        "Tier",
+        verbose_name=_("Tier"),
+        on_delete=models.SET_NULL,
+        related_name="schools",
+    )
 
     class Meta:
         verbose_name = _("School")
