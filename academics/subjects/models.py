@@ -13,6 +13,8 @@ class Subject(models.Model):
         _("Level"),
         max_length=1,
         choices=LevelChoices.choices,
+        null=True,
+        blank=True,
     )
     classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="subjects", blank=True)
     category = models.ForeignKey(
@@ -21,6 +23,7 @@ class Subject(models.Model):
         on_delete=models.CASCADE,
         related_name="subjects",
         null=True,
+        blank=True,
     )
     is_base = models.BooleanField(_("Is Base"), default=False, help_text=_("Is this a base subject?"))
     school = models.ForeignKey(
@@ -42,23 +45,27 @@ class Subject(models.Model):
 
 class Paper(models.Model):
     subject = models.ForeignKey(Subject, verbose_name=_("Subject"), on_delete=models.CASCADE, related_name="papers")
-    number = models.CharField(_("Number"), max_length=4)
-    name = models.CharField(_("Name"), max_length=20, null=True)
+    number = models.CharField(_("Number"), max_length=2)
+    name = models.CharField(_("Name"), max_length=20, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Paper")
         verbose_name_plural = _("Papers")
+        unique_together = (("subject", "number"),)
 
     def __str__(self):
         return self.name
     
     def get_paper_code(self):
         return f"{self.subject.code}/{self.number}"
+    
+    def get_name(self):
+        return self.name or f"{self.subject.name} Paper {self.number}"
 
 
 class Category(models.Model):
 
-    name = models.CharField(_("Name"), max_length=20)
+    name = models.CharField(_("Name"), max_length=20, unique=True)
 
     class Meta:
         verbose_name = _("category")
