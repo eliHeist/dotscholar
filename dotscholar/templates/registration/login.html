@@ -3,24 +3,24 @@
 <c-base title="login">
     <div class="h-screen grid place-content-center bg-base-200">
         <div>
-            <h1 class="text-3xl font-bold text-primary">DotScholar</h1>
-            <div class="card bg-base-100">
+            <h1 class="text-3xl font-bold text-primary text-center mb-8">DotScholar</h1>
+            <div class="card bg-base-100 min-w-96">
                 <div class="card-body">
-                    <h1 class="card-title">Login</h1>
+                    <h1 class="card-title text-center">Login</h1>
                     <form method="post">
                         {% csrf_token %}
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Email</legend>
-                            <input type="email" class="input" placeholder="" />
+                            <input type="email" class="input w-full" placeholder="" />
                             <p class="label text-error"></p>
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Password</legend>
-                            <input type="password" class="input" placeholder="" />
+                            <input type="password" class="input w-full" placeholder="" />
                             <p class="label text-error"></p>
                         </fieldset>
                         <a href="" class="text-secondary">Forgot Password?</a>
-                        <button class="btn btn-primary w-full">
+                        <button class="btn btn-primary w-full mt-2">
                             Login
                         </button>
                     </form>
