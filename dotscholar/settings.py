@@ -140,7 +140,7 @@ CSRF_COOKIE_SECURE = True
 STATIC_URL = "static/"
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'dotscholar/assets/static/'),
+    os.path.join(BASE_DIR, 'dotscholar/assets/static/dist/'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'dotscholar/assets/staticfiles')
 
