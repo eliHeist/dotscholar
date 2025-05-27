@@ -85,15 +85,17 @@
                         return;
                     }
                     this.loading = true;
-                    try {
-                        const response = await POST(`{% url 'api:onboarding' %}`, this.formData, true)
-                        const data = await response.json();
-                        this.loading = false;
-                        console.log('Success:', data);
-                    } catch (error) {
-                        this.loading = false;
-                        console.error('Error:', error);
+
+                    const response = await POST(`{% url 'api:onboarding' %}`, this.formData, true)
+
+                    if (response.ok) {
+                        window.location.href = '{% url "accounts:login" %}';
+                        return;
                     }
+                    const errorData = await response.json();
+                    this.loading = false;
+                    console.error('Error:', errorData);
+                    alert('An error occurred: ' + (errorData.detail || 'Please try again later.'));
                 }
             };
         }
