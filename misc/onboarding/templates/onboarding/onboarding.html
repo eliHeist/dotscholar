@@ -77,10 +77,11 @@
                     }
                     this.loading = true;
                     try {
-                        const response = await fetch('{% url 'api:onboarding' %}', {
+                        const response = await fetch(`{% url 'api:onboarding' %}`, {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
                             },
                             body: JSON.stringify(this.formData)
                         });
