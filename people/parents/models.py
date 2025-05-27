@@ -8,7 +8,7 @@ class Parent(models.Model):
     email = models.EmailField(_("Email"), max_length=254, null=True, blank=True)
     phone = models.CharField(_("Phone"), max_length=15)
     phone_2 = models.CharField(_("Phone 2"), max_length=15, null=True, blank=True)
-    address = models.CharField(max_length=255, verbose_name="Address")
+    address = models.CharField(max_length=100, verbose_name="Address")
     
     
     class Meta:
