@@ -26,6 +26,7 @@ class Subject(models.Model):
         blank=True,
     )
     is_base = models.BooleanField(_("Is Base"), default=False, help_text=_("Is this a base subject?"))
+    is_default = models.BooleanField(_("Is Default"), default=False, help_text=_("Is this a default subject?"))
     school = models.ForeignKey(
         School,
         verbose_name=_("School"),
