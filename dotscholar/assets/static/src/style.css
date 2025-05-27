@@ -4,11 +4,19 @@
 
 @plugin "@tailwindcss/container-queries";
 @plugin "daisyui" {
-    themes: custom-light --default, dark --prefersdark;
+    /* themes: custom-light --default, custom-dark --prefersdark; */
+    themes: custom-light --default;
 }
 
 @import "./css/_theme_light.css";
-@import "./css/_theme_dark.css";
+/* @import "./css/_theme_dark.css"; */
 
 @import "lucide-static/font/lucide.css";
 
+:root{
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.btn {
+    box-shadow: none;
+}

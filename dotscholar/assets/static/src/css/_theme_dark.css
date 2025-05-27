@@ -4,34 +4,34 @@
     prefersdark: true;
     color-scheme: "dark";
 
-    --color-base-100: oklch(15% 0.005 270); /* Dark background */
-    --color-base-200: oklch(18% 0.011 30.5); /* Slightly lighter dark */
-    --color-base-300: oklch(22% 0.014 30.8); /* Even lighter dark */
-    --color-base-content: oklch(90% 0.005 270); /* Light text on dark */
+    --color-base-100: oklch(12% 0.005 270); /* Very dark background */
+    --color-base-200: oklch(18% 0.0029 264.54); /* Darker version of provided base-200 */
+    --color-base-300: oklch(25% 0.017 215.47); /* Darker version of provided base-300 */
+    --color-base-content: oklch(90% 0.005 270); /* Light gray for text on dark backgrounds */
 
-    --color-primary: oklch(27.5% 0.196 257.8); /* #007090 - Keep primary consistent */
-    --color-primary-content: oklch(95% 0.01 0); /* Light color for contrast */
+    --color-primary: oklch(50.8% 0.0974 226.29); /* Provided primary (kept consistent) */
+    --color-primary-content: oklch(98% 0.005 0); /* Very light for contrast on primary */
 
-    --color-secondary: oklch(50.9% 0.206 200.6); /* #01A7C2 - Keep secondary consistent */
-    --color-secondary-content: oklch(98% 0.005 0); /* Very light for contrast */
+    --color-secondary: oklch(67.02% 0.1181 214.66); /* Provided secondary (kept consistent) */
+    --color-secondary-content: oklch(15% 0.005 270); /* Dark gray for contrast on secondary */
 
-    --color-accent: oklch(65% 0.16 160); /* A slightly darker accent for dark theme */
-    --color-accent-content: oklch(15% 0.08 160); /* Light contrast */
+    --color-accent: oklch(82.79% 0.1825 97.09); /* Provided accent (kept consistent) */
+    --color-accent-content: oklch(15% 0.015 97.09); /* Dark neutral for contrast on accent */
 
-    --color-neutral: oklch(2.1% 0.008 31.8); /* #050401 - Keep neutral consistent (very dark) */
-    --color-neutral-content: oklch(96% 0.005 0); /* Very light for contrast */
+    --color-neutral: oklch(10.64% 0.015 97.09); /* Provided neutral (kept consistent) */
+    --color-neutral-content: oklch(98% 0.005 0); /* Very light for contrast on neutral */
 
-    --color-info: oklch(60% 0.17 250); /* A darker info color */
-    --color-info-content: oklch(15% 0.07 250); /* Light contrast */
+    --color-info: oklch(60% 0.15 240); /* Darker cool blue for info */
+    --color-info-content: oklch(90% 0.05 240); /* Lighter blue for info text */
 
-    --color-success: oklch(70% 0.20 140); /* A success color for dark theme */
-    --color-success-content: oklch(15% 0.09 140); /* Light contrast */
+    --color-success: oklch(55% 0.18 140); /* Darker green for success */
+    --color-success-content: oklch(90% 0.07 140); /* Lighter green for success text */
 
-    --color-warning: oklch(65% 0.22 80); /* A warning color for dark theme */
-    --color-warning-content: oklch(40% 0.15 80); /* Darker contrast */
+    --color-warning: oklch(65% 0.20 75); /* Darker orange-yellow for warning */
+    --color-warning-content: oklch(90% 0.10 75); /* Lighter orange-yellow for warning text */
 
-    --color-error: oklch(50% 0.28 5); /* An error color for dark theme */
-    --color-error-content: oklch(95% 0.10 5); /* Light contrast */
+    --color-error: oklch(50% 0.25 20); /* Darker red for error */
+    --color-error-content: oklch(98% 0.005 0); /* Very light for error text */
 
     --radius-selector: 0.5rem;
     --radius-field: 0.25rem;

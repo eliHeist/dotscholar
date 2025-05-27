@@ -4,41 +4,42 @@
     prefersdark: false;
     color-scheme: "light";
 
-    --color-base-100: oklch(100% 0 0); /* #ffffff */
-    --color-base-200: oklch(91.7% 0.011 30.5); /* #eaebed */
-    --color-base-300: oklch(87.8% 0.014 30.8); /* #cfdee2 */
-    --color-base-content: oklch(20% 0.005 278); /* Adjusted for better contrast */
+    --color-base-100: oklch(100% 0 0); /* #ffffff - Pure white background */
+    --color-base-200: oklch(93.99% 0.0029 264.54); /* Provided base-200 */
+    --color-base-300: oklch(89.05% 0.017 215.47); /* Provided base-300 */
+    --color-base-content: oklch(15% 0.005 270); /* Dark gray for text on light backgrounds */
 
-    --color-primary: oklch(27.5% 0.196 257.8); /* #007090 */
-    --color-primary-content: oklch(95% 0.01 0); /* Light color for contrast */
+    --color-primary: oklch(50.8% 0.0974 226.29); /* Provided primary */
+    --color-primary-content: oklch(98% 0.005 0); /* Very light for contrast on primary */
 
-    --color-secondary: oklch(50.9% 0.206 200.6); /* #01a7c2 */
-    --color-secondary-content: oklch(98% 0.005 0); /* Very light for contrast */
+    --color-secondary: oklch(67.02% 0.1181 214.66); /* Provided secondary */
+    --color-secondary-content: oklch(15% 0.005 270); /* Dark gray for contrast on secondary */
 
-    --color-accent: oklch(75% 0.15 150); /* A complementary accent color */
-    --color-accent-content: oklch(20% 0.08 150); /* Darker shade for contrast */
+    --color-accent: oklch(82.79% 0.1825 97.09); /* Provided accent */
+    --color-accent-content: oklch(15% 0.015 97.09); /* Dark neutral for contrast on accent */
 
-    --color-neutral: oklch(2.1% 0.008 31.8); /* #050401 */
-    --color-neutral-content: oklch(96% 0.005 0); /* Very light for contrast */
+    --color-neutral: oklch(10.64% 0.015 97.09); /* Provided neutral */
+    --color-neutral-content: oklch(98% 0.005 0); /* Very light for contrast on neutral */
 
-    --color-info: oklch(70% 0.15 240); /* A lighter info color */
-    --color-info-content: oklch(20% 0.07 240); /* Darker shade for contrast */
+    --color-info: oklch(75% 0.12 240); /* A cool, slightly desaturated blue for info */
+    --color-info-content: oklch(20% 0.05 240); /* Darker blue for info text */
 
-    --color-success: oklch(80% 0.18 130); /* A success color */
-    --color-success-content: oklch(20% 0.09 130); /* Darker shade for contrast */
+    --color-success: oklch(70% 0.15 140); /* A balanced green for success */
+    --color-success-content: oklch(20% 0.07 140); /* Darker green for success text */
 
-    --color-warning: oklch(75% 0.20 90); /* A warning color */
-    --color-warning-content: oklch(30% 0.12 90); /* Darker shade for contrast */
+    --color-warning: oklch(80% 0.18 75); /* A warm orange-yellow for warning */
+    --color-warning-content: oklch(30% 0.10 75); /* Darker orange-yellow for warning text */
 
-    --color-error: oklch(60% 0.25 10); /* An error color */
-    --color-error-content: oklch(15% 0.10 10); /* Darker shade for contrast */
+    --color-error: oklch(65% 0.20 20); /* A strong red for error */
+    --color-error-content: oklch(98% 0.005 0); /* Very light for error text */
 
     --radius-selector: 0.5rem;
-    --radius-field: 0.25rem;
-    --radius-box: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.75rem;
     --size-selector: 0.25rem;
     --size-field: 0.25rem;
     --border: 1px;
     --depth: 1;
     --noise: 0;
+    --btn-shadow: none;
 }
