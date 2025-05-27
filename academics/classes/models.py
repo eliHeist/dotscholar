@@ -13,4 +13,7 @@ class Class(models.Model):
 
     def __str__(self):
         return f"S.{self.number}"
+    
+    def get_name(self):
+        return f"S.{self.number}"
 
