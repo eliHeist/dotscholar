@@ -4,6 +4,15 @@ from django.db.models import Count
 from .models import Subject, Paper, Category
 
 
+def mark_as_default(modeladmin, request, queryset):
+    queryset.update(is_default=True)
+mark_as_default.short_description = _("Mark selected items as default")
+
+def unmark_as_default(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+unmark_as_default.short_description = _("UnMark selected items as default")
+
+
 class PaperInline(admin.TabularInline):
     model = Paper
     extra = 0  # Number of empty forms to display
@@ -13,8 +22,10 @@ class PaperInline(admin.TabularInline):
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ("name", "code", "abbreviation", "level", "category", "is_base", "school", "paper_count")
+    list_display = ("name", "code", "abbreviation", "level", "category", "is_base", "is_default", "school", "paper_count")
     list_filter = ("level", "category", "is_base", "school", "classes")
+    actions = [mark_as_default, unmark_as_default]
+    # list_editable = ("is_default",)
     search_fields = ("name", "code", "abbreviation")
     filter_horizontal = ("classes",)
     inlines = [PaperInline]
