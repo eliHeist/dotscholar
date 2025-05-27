@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Tier
 
-# Register your models here.
+@admin.register(Tier)
+class TierAdmin(admin.ModelAdmin):
+    list_display = ("name", "price")
+    search_fields = ("name",)
+    list_filter = ("price",)
+    list_per_page = 20
