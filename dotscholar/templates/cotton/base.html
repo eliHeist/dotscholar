@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'compiled/index.css' %}">
 </head>
 <body class="h-screen bg-base-100">
+    {{ slot }}
     {% block content %}{% endblock %}
     <script src="{% static 'compiled/index.js' %}" defer></script>
 </body>
