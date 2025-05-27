@@ -4,10 +4,11 @@
 
 @plugin "@tailwindcss/container-queries";
 @plugin "daisyui" {
-    themes: light --default;
+    themes: custom-light --default, dark --prefersdark;
 }
 
 @import "./css/_theme_light.css";
+@import "./css/_theme_dark.css";
 
 @import "lucide-static/font/lucide.css";
 

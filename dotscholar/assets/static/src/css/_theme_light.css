@@ -1,38 +1,38 @@
 @plugin "daisyui/theme" {
-    name: "light";
+    name: "custom-light";
     default: true;
     prefersdark: false;
     color-scheme: "light";
 
     --color-base-100: oklch(100% 0 0); /* #ffffff */
-    --color-base-200: oklch(96% 0.007 95); /* #f1f1e7 */
-    --color-base-300: oklch(92% 0.007 95); /* #f4f4ec */
-    --color-base-content: oklch(22% 0.005 278); /* #34332f */
-  
-    --color-primary: oklch(91% 0.11 83); /* #ffed8b */
-    --color-primary-content: oklch(20% 0.09 83); /* #332900 */
-  
-    --color-secondary: oklch(7% 0.02 264.29); /* #10181d */
-    --color-secondary-content: oklch(95% 0.005 280); /* Soft Gray for contrast */
-  
-    --color-accent: oklch(72% 0.14 190); /* Cool Teal for accent */
-    --color-accent-content: oklch(22% 0.08 190); /* Dark Teal contrast */
-  
-    --color-neutral: oklch(7% 0.02 264); /* #10181d */
-    --color-neutral-content: oklch(90% 0.01 280); /* Soft Gray contrast */
-  
-    --color-info: oklch(80% 0.13 220); /* Light Blue */
-    --color-info-content: oklch(25% 0.06 220); /* Deep Blue contrast */
-  
-    --color-success: oklch(70% 0.22 145); /* #9fefb0 */
-    --color-success-content: oklch(25% 0.11 145); /* #1c4b1f */
-  
-    --color-warning: oklch(80% 0.19 78); /* #ffc69d */
-    --color-warning-content: oklch(40% 0.15 78); /* #66391c */
-  
-    --color-error: oklch(65% 0.22 28); /* Reddish tone */
-    --color-error-content: oklch(25% 0.09 15); /* Deep Red for errors */
-  
+    --color-base-200: oklch(91.7% 0.011 30.5); /* #eaebed */
+    --color-base-300: oklch(87.8% 0.014 30.8); /* #cfdee2 */
+    --color-base-content: oklch(20% 0.005 278); /* Adjusted for better contrast */
+
+    --color-primary: oklch(27.5% 0.196 257.8); /* #007090 */
+    --color-primary-content: oklch(95% 0.01 0); /* Light color for contrast */
+
+    --color-secondary: oklch(50.9% 0.206 200.6); /* #01a7c2 */
+    --color-secondary-content: oklch(98% 0.005 0); /* Very light for contrast */
+
+    --color-accent: oklch(75% 0.15 150); /* A complementary accent color */
+    --color-accent-content: oklch(20% 0.08 150); /* Darker shade for contrast */
+
+    --color-neutral: oklch(2.1% 0.008 31.8); /* #050401 */
+    --color-neutral-content: oklch(96% 0.005 0); /* Very light for contrast */
+
+    --color-info: oklch(70% 0.15 240); /* A lighter info color */
+    --color-info-content: oklch(20% 0.07 240); /* Darker shade for contrast */
+
+    --color-success: oklch(80% 0.18 130); /* A success color */
+    --color-success-content: oklch(20% 0.09 130); /* Darker shade for contrast */
+
+    --color-warning: oklch(75% 0.20 90); /* A warning color */
+    --color-warning-content: oklch(30% 0.12 90); /* Darker shade for contrast */
+
+    --color-error: oklch(60% 0.25 10); /* An error color */
+    --color-error-content: oklch(15% 0.10 10); /* Darker shade for contrast */
+
     --radius-selector: 0.5rem;
     --radius-field: 0.25rem;
     --radius-box: 0.5rem;
