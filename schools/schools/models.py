@@ -7,7 +7,8 @@ from subscriptions.tiers.models import Tier
 class School(models.Model):
 
     name = models.CharField(_("Name"), max_length=50)
-    registration_number = models.CharField(_("Reg no."), max_length=50, unique=True)
+    short_name = models.CharField(_("Short Name"), max_length=10, blank=True, null=True)
+    registration_number = models.CharField(_("Reg no."), max_length=50, unique=True, blank=True, null=True)
     logo = models.FileField(_("Logo"), upload_to='school_logos', max_length=100, blank=True, null=True)
     tier = models.ForeignKey(
         Tier,
