@@ -75,5 +75,17 @@ class Category(models.Model):
         return self.name
 
 
+class SchoolPapersGroup(models.Model):
+
+    school = models.OneToOneField(School, verbose_name=_("School"), on_delete=models.CASCADE)
+    papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), related_name="school_papers_groups", blank=True)
+
+    class Meta:
+        verbose_name = _("SchoolPapersGroup")
+        verbose_name_plural = _("SchoolPapersGroups")
+
+    def __str__(self):
+        return self.name
+
 
 
