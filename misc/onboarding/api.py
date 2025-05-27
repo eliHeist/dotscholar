@@ -38,7 +38,7 @@ def onboarding(request, data: CreateUserAndSchoolSchema):
                 first_name=data.user.first_name,
                 last_name=data.user.last_name,
                 school=school,
-                is_owner=True
+                is_school_owner=True
             )
 
             # Create the SchoolPapersGroup and assign it to the school

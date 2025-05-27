@@ -1,9 +1,18 @@
 from ninja import Schema
-from accounts.schemas import UserSchema
-from schools.schools.schemas import SchoolSchema
 
 
-# Define the schema for creating a new User and School
+class UserSchema(Schema):
+    email: str
+    password: str
+    password_confirm: str
+    first_name: str
+    last_name: str
+
+class SchoolSchema(Schema):
+    name: str
+    short_name: str
+
+
 class CreateUserAndSchoolSchema(Schema):
     user: UserSchema
     school: SchoolSchema

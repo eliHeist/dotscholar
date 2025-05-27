@@ -17,17 +17,14 @@ from schools.schools.models import School
 class UserManager(BaseUserManager):
     """Class to manage the creation of user objects"""
 
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, **extra_fields):
         """Creates and returns a user object
         Arguments:
-        username: the string to use as username
         email: the string to use as email
         password: the string to use as password
 
         Optionals:
-        is_staff: Boolean to indicate a user is staff or not
-        is_admin: Boolean to indicate a user is an admin or not
-        is_active: Boolean to indicate a user can login or not
+        Any additional fields to set on the User model
 
         Return:
             A user object
@@ -39,9 +36,8 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError('Users must have a password')
 
-        user = self.model(email = self.normalize_email(email),)
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
-        user.is_active=True
         user.save(using=self._db)
         return user
 
@@ -63,9 +59,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255, null=True, blank=True)
-    username = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    first_name = models.CharField(max_length=25, null=True, blank=True)
+    last_name = models.CharField(max_length=25, null=True, blank=True)
+    username = models.CharField(max_length=25, unique=True, null=True, blank=True)
     email = models.EmailField(verbose_name='Email address', max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
