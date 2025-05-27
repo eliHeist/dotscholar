@@ -54,7 +54,7 @@ class Paper(models.Model):
         unique_together = (("subject", "number"),)
 
     def __str__(self):
-        return self.name
+        return self.get_name()
     
     def get_paper_code(self):
         return f"{self.subject.code}/{self.number}"
