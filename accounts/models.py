@@ -87,7 +87,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.username
+        return self.username or self.email
 
     def delete(self, using=None, keep_parents=False):
         self.is_active ^= True
