@@ -1,0 +1,98 @@
+<c-base title="Onboarding" class="onboarding">
+    <div x-data="onboardingForm()" class="onboarding-form">
+        <ul class="steps">
+            <li class="step step-primary">Register</li>
+            <li class="step step-primary">Choose plan</li>
+            <li class="step">Purchase</li>
+            <li class="step">Receive Product</li>
+        </ul>
+        <form @submit.prevent="submitForm">
+            <h2>User Information</h2>
+            <p>This will be the default user that is the school admin and owner.</p>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Email</legend>
+                <input type="email" id="email" class="input" x-model="formData.email" required>
+                <p class="label">Enter your work email</p>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">First Name</legend>
+                <input type="text" id="first_name" class="input" x-model="formData.first_name" required>
+                <p class="label">Your first name as it appears on official documents.</p>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Last Name</legend>
+                <input type="text" id="last_name" class="input" x-model="formData.last_name" required>
+                <p class="label">Your last name as it appears on official documents.</p>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Password</legend>
+                <input type="password" id="password" class="input" x-model="formData.password" required>
+                <p class="label">Choose a secure password.</p>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Confirm Password</legend>
+                <input type="password" id="password_confirm" class="input" x-model="formData.password_confirm" required>
+                <p class="label">Re-enter your password for confirmation.</p>
+            </fieldset>
+
+            <h2>School Information</h2>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">School Name</legend>
+                <input type="text" id="school_name" class="input" x-model="formData.school_name" required>
+                <p class="label">The name of your school or institution.</p>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Short Name</legend>
+                <input type="text" id="school_short_name" class="input" x-model="formData.school_short_name" required>
+                <p class="label">Enter a short hand name for the school.</p>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div x-show="loading" class="fixed inset-0 grid place-content-center bg-base-100 bg-opacity-50">
+            <span class="loading loading-infinity loading-xl"></span>
+        </div>
+    </div>
+
+    <script>
+        function onboardingForm() {
+            return {
+                formData: {
+                    username: '',
+                    email: '',
+                    first_name: '',
+                    last_name: '',
+                    password: '',
+                    password_confirm: '',
+                    school_name: '',
+                    school_short_name: '',
+                },
+                loading: false,
+                async submitForm() {
+                    // Validate passwords match
+                    if (this.formData.password !== this.formData.password_confirm) {
+                        alert('Passwords do not match.');
+                        return;
+                    }
+                    this.loading = true;
+                    try {
+                        const response = await fetch('{% url 'api:onboarding' %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(this.formData)
+                        });
+                        const data = await response.json();
+                        this.loading = false;
+                        console.log('Success:', data);
+                    } catch (error) {
+                        this.loading = false;
+                        console.error('Error:', error);
+                    }
+                }
+            };
+        }
+    </script>
+</c-base>
