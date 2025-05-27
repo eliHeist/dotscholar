@@ -12,13 +12,12 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist', // Output directory
-        assetsDir: 'compiled', // Keep assets in a specific folder
         sourcemap: true,
         rollupOptions: {
             output: {
-                entryFileNames: 'compiled/[name].js',
-                chunkFileNames: 'compiled/[name].js',
-                assetFileNames: 'compiled/[name][extname]'
+                entryFileNames: '[name].js',
+                chunkFileNames: '[name].js',
+                assetFileNames: '[name][extname]'
             }
         }
     }
