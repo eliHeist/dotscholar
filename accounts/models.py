@@ -100,6 +100,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def get_school(self):
+        """Returns the school of the user"""
+        return self.school
+
     @property
     def is_staff(self):
         "Is the user a member of staff?"

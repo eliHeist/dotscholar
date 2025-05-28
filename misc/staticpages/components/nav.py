@@ -5,14 +5,15 @@ from django.utils.functional import SimpleLazyObject
 class NavView(UnicornView):
     menu_items = [
         {
-            "title": "People",
+            "title": "Landing",
             "icon": "icon-user-round",
-            "permissions": ["students.view_student"],
+            "permissions": [],
             "links": [
                 {
-                    "title": "Students",
-                    "url": "students:list",
-                    "permissions": ["students.view_student"],
+                    "title": "Home",
+                    "icon": "icon-house",
+                    "url": "pages:landing",
+                    "permissions": [],
                 },
             ],
         },
