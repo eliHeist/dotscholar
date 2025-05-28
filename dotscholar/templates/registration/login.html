@@ -11,12 +11,12 @@
                         {% csrf_token %}
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Email</legend>
-                            <input type="email" class="input w-full" placeholder="" />
+                            <input type="email" name="email" class="input w-full" placeholder="" />
                             <p class="label text-error"></p>
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Password</legend>
-                            <input type="password" class="input w-full" placeholder="" />
+                            <input type="password" name="password" class="input w-full" placeholder="" />
                             <p class="label text-error"></p>
                         </fieldset>
                         <a href="" class="text-secondary">Forgot Password?</a>

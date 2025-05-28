@@ -26,9 +26,9 @@ class LoginView(View):
     def post(self, request):
         data = request.POST
         get_data = request.GET
-        username = data.get('username').strip()
+        email = data.get('email').strip()
         password = data.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -37,18 +37,18 @@ class LoginView(View):
                 return redirect(next_route)
             return redirect(settings.LOGIN_REDIRECT_URL)
         
-        user_obj = User.objects.filter(username=username).exists()
-        username_error = "Username does not exist."
+        user_obj = User.objects.filter(email=email).exists()
+        email_error = "Email does not exist."
         password_error = None
 
         if user_obj:
-            username_error = None
+            email_error = None
             password_error = "Password is incorrect."
 
         context = {
-            "username": username,
+            "email": email,
             "password": password,
-            "username_error": username_error,
+            "email_error": email_error,
             "password_error": password_error,
         }
         return render(request, 'registration/login.html', context)
