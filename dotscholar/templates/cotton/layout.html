@@ -1,16 +1,15 @@
 {% load static unicorn %}
 
 <c-base title="{{ title }}">
-    {% comment %} <!-- Topbar --> {% endcomment %}
     <div class="flex h-screen">
         {% with user=request.user %} {% unicorn 'nav' user %} {% endwith %}
     
         <div class="flex-1 flex flex-col">
             {% comment %} <!-- Topbar --> {% endcomment %}
-            <div class="flex justify-end items-center bg-white border-b p-4">
+            <div class="flex justify-end items-center bg-base-100 p-2">
                 {% comment %} <button class="btn btn-sm btn-outline btn-primary mr-4">🔔</button> {% endcomment %}
                 <div class="flex items-center space-x-2">
-                    <span class="font-medium">{{ request.user.email }}</span>
+                    <span class="font-medium text-sm">{{ request.user.get_short_name }}</span>
                     <div class="avatar avatar-placeholder">
                         <div class="bg-neutral text-neutral-content w-8 rounded-full">
                           <span class="text-xs">UI</span>

@@ -21,12 +21,11 @@
         <h2 class="text-xl font-bold mb-6">
             {{ request.user.get_school.short_name }}
         </h2>
-        <ul class="menu w-full p-0 -ml-3">
+        <ul class="menu w-full p-0 -ml-2">
             {% for group in permitted_menu %}
                 <li>
                     <details>
-                        <summary>
-                            <i class="{{ group.icon }}"></i>
+                        <summary class="font-semibold opacity-60">
                             <span>{{ group.title }}</span>
                         </summary>
                         <ul>
