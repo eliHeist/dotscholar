@@ -1,0 +1,18 @@
+
+<c-layout title="Management">
+    <div role="tablist" aria-label="Management nav links" class="tabs tabs-border" x-data="{
+        findActiveStatus(element, equal=false){
+        
+            let path = window.location.pathname;
+            let url = element.getAttribute('href');
+
+            if (path.startsWith(url) && !equal || equal && path === url) {
+                return true
+            }
+            
+            return false
+        },
+    }">
+        <a href="{% url 'management:overview' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Overview</a>
+    </div>
+</c-layout>
