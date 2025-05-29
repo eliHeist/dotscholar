@@ -1,62 +1,73 @@
 <c-base title="Onboarding" class="onboarding">
     <div x-data="onboardingForm()" class="onboarding-form">
         
-        <form @submit.prevent="submitForm" class="pt-28">
-            <div class="grid md:grid-cols-2 gap-4 w-fit max-w-11/12 mx-auto">
-                <div class="card bg-base-100">
-                    <div class="card-body">
-                        <h2 class="text-xl font-medium">User Information</h2>
-                        <p class="mb-4">This will be the default user that is the school admin and owner.</p>
-                        
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Email</legend>
-                            <input type="email" id="email" class="input w-full" x-model="formData.user.email" required>
-                            <p class="label">Enter your work email</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">First Name</legend>
-                            <input type="text" id="first_name" class="input w-full" x-model="formData.user.first_name" required>
-                            <p class="label">Your first name as it appears on official documents.</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Last Name</legend>
-                            <input type="text" id="last_name" class="input w-full" x-model="formData.user.last_name" required>
-                            <p class="label">Your last name as it appears on official documents.</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Password</legend>
-                            <input type="password" id="password" class="input w-full" x-model="formData.user.password" required>
-                            <p class="label">Choose a secure password.</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Confirm Password</legend>
-                            <input type="password" id="password_confirm" class="input w-full" x-model="formData.user.password_confirm" required>
-                            <p class="label">Re-enter your password for confirmation.</p>
-                        </fieldset>
-                    </div>
+        <form @submit.prevent="submitForm" class="pt-4">
+            <h2 class="text-3xl font-semibold text-center mb-6">Onboarding</h2>
+            <div class="steps w-full mb-8">
+                <button class="step text-sm" :class="{ 'step-primary': step >= 1 }" @click="step = 1">School Details</button>
+                <button class="step text-sm" :class="{ 'step-primary': step >= 2 }" @click="step = 2">User Details</button>
+                <button class="step text-sm" :class="{ 'step-primary': step >= 3 }" @click="step = 3">Create Password</button>
+            </div>
+
+            <div x-show="step === 1" class="card bg-base-100 max-w-96 mx-auto">
+                <div class="card-body">
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">School Name</legend>
+                        <input type="text" name="school_name" id="school_name" class="input w-full" x-model="formData.school.name" required>
+                        <p class="label">The name of your school or institution.</p>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Short Name</legend>
+                        <input type="text" name="school_short_name" id="school_short_name" class="input w-full" x-model="formData.school.short_name" required>
+                        <p class="label">Enter a short hand name for the school.</p>
+                    </fieldset>
+                    <button type="button" class="btn btn-ghost mt-auto" @click="step = 2">
+                        Next
+                        <span class="icon-chevrons-right"></span>
+                    </button>
                 </div>
-    
-                <div class="card bg-base-100">
-                    <div class="card-body">
-                        <h2 class="text-xl font-medium mb-4">School Information</h2>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">School Name</legend>
-                            <input type="text" id="school_name" class="input w-full" x-model="formData.school.name" required>
-                            <p class="label">The name of your school or institution.</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Short Name</legend>
-                            <input type="text" id="school_short_name" class="input w-full" x-model="formData.school.short_name" required>
-                            <p class="label">Enter a short hand name for the school.</p>
-                        </fieldset>
-                        <button type="submit" class="btn btn-primary mt-auto">Submit</button>
-                    </div>
+            </div>
+
+            <div x-show="step === 2" class="card bg-base-100 max-w-96 mx-auto">
+                <div class="card-body">
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Email</legend>
+                        <input type="email" name="email" id="email" class="input w-full" x-model="formData.user.email" required>
+                        <p class="label">Enter your work email</p>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">First Name</legend>
+                        <input type="text" name="first_name" id="first_name" class="input w-full" x-model="formData.user.first_name" required>
+                        <p class="label">Your first name as it appears on official documents.</p>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Last Name</legend>
+                        <input type="text" name="last_name" id="last_name" class="input w-full" x-model="formData.user.last_name" required>
+                        <p class="label">Your last name as it appears on official documents.</p>
+                    </fieldset>
+                    <button type="button" class="btn btn-ghost mt-auto" @click="step = 3">Next</button>
+                </div>
+            </div>
+
+            <div x-show="step === 3" class="card bg-base-100 max-w-96 mx-auto">
+                <div class="card-body">
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Password</legend>
+                        <input type="password" name="password" id="password" class="input w-full" x-model="formData.user.password" required>
+                        <p class="label">Choose a secure password.</p>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Confirm Password</legend>
+                        <input type="password" name="password_confirm" id="password_confirm" class="input w-full" x-model="formData.user.password_confirm" required>
+                        <p class="label">Re-enter your password for confirmation.</p>
+                    </fieldset>
+                    <button type="submit" class="btn btn-primary mt-auto">Submit</button>
                 </div>
             </div>
 
         </form>
 
-        <div x-show="loading" class="fixed inset-0 grid place-content-center bg-base-100 bg-opacity-50">
+        <div x-show="loading" class="fixed inset-0 grid place-content-center bg-base-100 bg-opacity-50 z-20">
             <span class="loading loading-infinity loading-xl"></span>
         </div>
     </div>
@@ -64,6 +75,7 @@
     <script>
         function onboardingForm() {
             return {
+                step: 1,
                 formData: {
                     user: {
                         username: '',

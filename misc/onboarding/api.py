@@ -13,7 +13,7 @@ from .schemas import CreateUserAndSchoolSchema
 
 onboarding_router = Router()
 
-@onboarding_router.post("/onboarding/", auth=django_auth, url_name="onboarding")
+@onboarding_router.post("/new_school/", url_name="onboarding")
 def onboarding(request, data: CreateUserAndSchoolSchema):
     """
     in an atomic transaction
