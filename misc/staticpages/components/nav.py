@@ -6,13 +6,36 @@ class NavView(UnicornView):
     menu_items = [
         {
             "title": "Landing",
-            "icon": "icon-user-round",
             "permissions": [],
             "links": [
                 {
                     "title": "Home",
                     "icon": "icon-house",
                     "url": "pages:landing",
+                    "permissions": [],
+                },
+            ],
+        },
+        {
+            "title": "Management",
+            "permissions": [],
+            "links": [
+                {
+                    "title": "Overview",
+                    "icon": "icon-grip",
+                    "url": "management:overview",
+                    "permissions": [],
+                },
+            ],
+        },
+        {
+            "title": "Academics",
+            "permissions": [],
+            "links": [
+                {
+                    "title": "Students",
+                    "icon": "icon-house",
+                    "url": "students:student-list",
                     "permissions": [],
                 },
             ],
@@ -49,7 +72,6 @@ class NavView(UnicornView):
                 permitted_menu.append(
                     {
                         "title": group["title"],
-                        "icon": group["icon"],
                         "links": permitted_links,
                     }
                 )

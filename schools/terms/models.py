@@ -3,7 +3,6 @@ from decimal import Decimal
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from schools.periods.models import Year
 from people.students.models import Student
 
 # Create your models here.
