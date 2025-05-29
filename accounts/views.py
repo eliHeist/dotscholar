@@ -1,11 +1,9 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import get_user_model
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect, render
-from django.views import View
-from django.contrib.auth import views
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout, views, get_user_model
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
 
 
 User = get_user_model()
@@ -53,8 +51,10 @@ class LoginView(View):
         }
         return render(request, 'registration/login.html', context)
 
-class LogoutView(views.LogoutView):
-    pass
+class LogoutView(View):
+    def post(self, request):
+        logout(request)
+        return redirect(settings.LOGOUT_REDIRECT_URL)
 
 class PasswordResetView(views.PasswordResetView):
     success_url = reverse_lazy("accounts:password_reset_done")
