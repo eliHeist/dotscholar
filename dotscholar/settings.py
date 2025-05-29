@@ -153,8 +153,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'dotscholar/assets/media')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # auth config
-# LOGIN_REDIRECT_URL = "frontend:landing"
-# LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = "pages:landing"
+LOGOUT_REDIRECT_URL = 'staticpages:landing-page'
 AUTH_USER_MODEL = "accounts.User"
 
 # Email settings
