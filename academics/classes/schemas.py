@@ -6,4 +6,4 @@ from .models import Class
 class ClassSchema(ModelSchema):
     class Meta:
         model = Class
-        model_fields = "__all__"
+        fields = "__all__"
