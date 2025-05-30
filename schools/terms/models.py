@@ -16,6 +16,7 @@ class Term(models.Model):
     number = models.DecimalField(_("Number"), max_digits=1, decimal_places=0, choices=NUMBER_CHOICES)
     start_date = models.DateField(_("Start Date"), unique=True)
     end_date = models.DateField(_("End Date"), unique=True)
+    active = models.BooleanField(_("Active"), default=True)
     
 
     class Meta:
