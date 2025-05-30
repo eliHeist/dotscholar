@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from academics.classes.models import Class
 from people.students.models import Student
 
 # Create your models here.
@@ -15,9 +16,6 @@ class Term(models.Model):
     number = models.DecimalField(_("Number"), max_digits=1, decimal_places=0, choices=NUMBER_CHOICES)
     start_date = models.DateField(_("Start Date"), unique=True)
     end_date = models.DateField(_("End Date"), unique=True)
-    fees = models.PositiveIntegerField(_("Fees"), default=0)
-    
-    registered_students = models.ManyToManyField(Student, related_name=_("terms"))
     
 
     class Meta:
@@ -29,3 +27,15 @@ class Term(models.Model):
     def __str__(self):
         return f"{self.year} - {self.number}"
 
+
+class TermFee(models.Model):
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name=_("fees"))
+    classes = models.ManyToManyField(Class, related_name=_("term_fees"), blank=True)
+    amount = models.PositiveIntegerField(_("Amount"), default=0)
+
+    class Meta:
+        verbose_name = _("Term Fee")
+        verbose_name_plural = _("Term Fees")
+
+    def __str__(self):
+        return f"{self.classes} - {self.term} - {self.amount}"
