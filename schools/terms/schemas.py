@@ -1,11 +1,13 @@
 from ninja import ModelSchema, Schema
 from ninja.orm import create_schema
 
+from academics.classes.schemas import ClassSchema
+
 from .models import Term, TermFee
 
 class TermFeeSchemaIn(Schema):
-    classes: list[int]
     amount: int
+    classes: list[int]
 
 class TermSchemaIn(Schema):
     number: int
@@ -13,17 +15,25 @@ class TermSchemaIn(Schema):
     end_date: str
     term_fees: list[TermFeeSchemaIn] = []
 
-TermSchemaOut = create_schema(Term, fields=["id", "number", "start_date", "end_date"])
+TermSchemaOut = create_schema(Term, name="TermSchemaOut", fields=["id", "number", "start_date", "end_date"])
 
-# TermWithFeesSchemaOut = create_schema(Term, fields=["id", "number", "start_date", "end_date"], custom_fields=[("term_fees", list[TermFeeSchemaIn], None)])
+class TermFeeSchemaOut(Schema):
+    id: int
+    amount: int
+    classes: list[ClassSchema] = []
 
-class TermWithFeesSchemaOut(ModelSchema):
-    class Config:
-        model = Term
-        model_fields = "__all__"
+
+class TermWithFeesSchemaOut(Schema):
+    id: int
+    number: int
+    start_date: str
+    end_date: str
+    term_fees: list[TermFeeSchemaOut] = []
+
+    @staticmethod
+    def resolve_term_fees(obj):
+        return [TermFeeSchemaOut(**fee) for fee in obj.term_fees.all()]
     
-    term_fees: list[TermFeeSchemaIn] = []
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.term_fees = [TermFeeSchemaIn(**fee) for fee in self.term_fees.all()]
+    # def __init__(self, **kwargs):
+    #     super().__init__(**kwargs)
+    #     self.term_fees = [TermFeeSchemaOut(**fee) for fee in self.term_fees.all()]
