@@ -30,6 +30,8 @@ class ManagementClassesView(View):
         # annotate each stream to a class
         for cls in classes:
             cls.streams = streams.filter(current_class=cls)
+        
+        
 
         context = {
             'classes': classes,
