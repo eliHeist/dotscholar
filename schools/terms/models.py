@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from academics.classes.models import Class
-from people.students.models import Student
+from schools.schools.models import School
 
 # Create your models here.
 class Term(models.Model):
@@ -14,6 +14,12 @@ class Term(models.Model):
         (Decimal('2'), '2'),
         (Decimal('3'), '3'),
     ]
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+        related_name="terms",
+        verbose_name=_("School")
+    )
     number = models.DecimalField(_("Number"), max_digits=1, decimal_places=0, choices=NUMBER_CHOICES)
     start_date = models.DateField(_("Start Date"), unique=True)
     end_date = models.DateField(_("End Date"), unique=True)
