@@ -22,7 +22,6 @@ class Student(models.Model):
     payment_code = models.CharField(_("Payment Code"), max_length=50)
     
     current_optional_papers = models.ManyToManyField(Paper, verbose_name=_("Optional Papers"), blank=True, related_name="current_students")
-    current_stream = models.ForeignKey(Stream, verbose_name=_("Current Stream"), on_delete=models.PROTECT, related_name="current_students")
 
     class Meta:
         verbose_name = _("Student")
