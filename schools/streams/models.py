@@ -8,7 +8,7 @@ from schools.schools.models import School
 class Stream(models.Model):
 
     name = models.CharField(_("Name"), max_length=50, null=True, blank=True)
-    school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE)
+    school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="streams")
     current_class = models.ForeignKey(Class, verbose_name=_("Class"), on_delete=models.CASCADE)
 
     class Meta:
