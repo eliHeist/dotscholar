@@ -1,6 +1,6 @@
 
 <c-layout title="{{ title }} Management">
-    <div role="tablist" aria-label="Management nav links" class="tabs tabs-border" x-data="{
+    <div role="tablist" aria-label="Management nav links" class="tabs tabs-border mb-4" x-data="{
         findActiveStatus(element, equal=false){
         
             let path = window.location.pathname;
@@ -14,6 +14,7 @@
         },
     }">
         <a href="{% url 'management:overview' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Overview</a>
+        <a href="{% url 'management:classes' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Classes</a>
     </div>
     {{ slot }}
 </c-layout>
