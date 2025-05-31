@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from academics.classes.models import Class
@@ -26,7 +27,19 @@ class Term(models.Model):
         ordering = ["start_date",]
 
     def __str__(self):
-        return f"{self.year} - {self.number}"
+        return f"{self.start_date} - {self.number}"
+    
+    def get_days(self):
+        return (self.end_date - self.start_date).days
+    
+    def get_days_done(self):
+        return (timezone.now().date() - self.start_date).days
+    
+    def get_day_number(self):
+        return (timezone.now().date() - self.start_date).days + 1
+    
+    def get_days_left(self):
+        return (self.end_date - timezone.now().date()).days
 
 
 class TermFee(models.Model):

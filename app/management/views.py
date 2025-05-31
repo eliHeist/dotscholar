@@ -9,8 +9,8 @@ class ManagementOverview(View):
 
     def get(self, request, *args, **kwargs):
         # get active term for which this today is in 
-        active_term = Term.objects.filter(active=True).first()
+        current_term = Term.objects.filter(active=True).first()
         context = {
-            'active_term': active_term,
+            'current_term': current_term,
         }
         return render(request, self.template_name, context)

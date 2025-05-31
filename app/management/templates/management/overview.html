@@ -1,7 +1,10 @@
-<c-management title="Overview">
-	<div class="">
-		<!-- Open the modal using ID.showModal() method -->
-		<button class="btn" onclick="terms_modal.showModal()">Add a Term</button>
+<c-management title="Terms">
+	<div class="p-2">
+        <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+            <li>
+                <button class="btn" onclick="terms_modal.showModal()">Add a Term</button>
+            </li>
+        </ul>
 		<dialog id="terms_modal" class="modal" x-data="termFormData">
 			<div class="modal-box relative @container">
                 <h3 class="text-lg font-bold">Hello!</h3>
@@ -89,7 +92,35 @@
 		</dialog>
 	</div>
 
-    
+    <div class="px-3">
+        <div class="card bg-base-100">
+            <div class="card-body">
+                <span class="badge badge-xs badge-success">Current</span>
+                <div class="flex justify-between">
+                    <h2 class="text-3xl font-bold">Term {{ current_term.number }}</h2>
+                    {% comment %} <span class="text-xl">$29/mo</span> {% endcomment %}
+                </div>
+                <div class="">
+                    {% comment %} date range {% endcomment %}
+                    <p class="font-semibold opacity-60">
+                        <span class="">{{ current_term.start_date|date:"F j, Y" }}</span>
+                        <span class="">-</span>
+                        <span class="">{{ current_term.end_date|date:"F j, Y" }}</span>
+                    </p>
+                    {% comment %} days left to complete term {% endcomment %}
+                    <p class="text-sm opacity-60">
+                        {% if current_term.get_day_number %}
+                            <span class="">Day </span>
+                            <span class="">{{ current_term.get_day_number }}</span>
+                            <span class=""> of </span>
+                            <span class="">{{ current_term.get_days }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         console.log('Management Overview Loaded');
