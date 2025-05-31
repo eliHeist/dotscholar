@@ -80,6 +80,7 @@ class SchoolPapersGroup(models.Model):
 
     school = models.OneToOneField(School, verbose_name=_("School"), on_delete=models.CASCADE)
     papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), related_name="school_papers_groups", blank=True)
+    classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="paper_groups")
 
     class Meta:
         verbose_name = _("SchoolPapersGroup")
