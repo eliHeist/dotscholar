@@ -93,134 +93,86 @@
 		</dialog>
 	</div> {% endcomment %}
 
-    <div class="px-3">
-        <div class="card bg-base-100">
-            <div class="card-body">
-                <span class="badge badge-xs badge-success">Current</span>
-                <div class="flex justify-between">
-                    <h2 class="text-3xl font-bold">Term {{ current_term.number }}</h2>
-                    {% comment %} <span class="text-xl">$29/mo</span> {% endcomment %}
-                </div>
-                <div class="">
-                    {% comment %} date range {% endcomment %}
-                    <p class="font-semibold opacity-60">
-                        <span class="">{{ current_term.start_date|date:"F j, Y" }}</span>
-                        <span class="">-</span>
-                        <span class="">{{ current_term.end_date|date:"F j, Y" }}</span>
-                    </p>
-                    {% comment %} days left to complete term {% endcomment %}
-                    <p class="text-sm opacity-60">
-                        {% if current_term.get_day_number %}
-                            <span class="">Day </span>
-                            <span class="">{{ current_term.get_day_number }}</span>
-                            <span class=""> of </span>
-                            <span class="">{{ current_term.get_days }}</span>
-                        {% endif %}
-                    </p>
+    <div class="px-4" x-data="classPageData">
+        <div class="steps w-full mb-8">
+            {% for class in classes %}
+            <button type="button" class="step text-sm" :class="{ 'step-primary': step >= {{ forloop.counter }} }" @click="step = {{ forloop.counter }}">
+                <span class="step-icon">{{ class.number }}</span>
+                {{ class.get_name }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <div class="content">
+            {% for class in classes %}
+            <div x-show="step === {{ forloop.counter }}" class="card bg-base-100 mb-4">
+                <ul class="list bg-base-100 rounded-box shadow-md">
+  
+                    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Streams</li>
+                    
+                    {% for stream in class.streams %}
+                    <li class="list-row">
+                      <div class="text-4xl font-thin opacity-30 tabular-nums">{{ forloop.counter }}</div>
+                      <div class="list-col-grow">
+                        <div>{{ stream.name }}</div>
+                        <div class="text-xs uppercase font-semibold opacity-60">
+                            {{ stream.get_enrollments.count }} 
+                            {{ stream.get_enrollments.count == 1 ? 'student' : 'students' }} enrolled
+                        </div>
+                      </div>
+                      <div>
+                        <div>Class Teacher</div>
+                        <div class="text-xs uppercase font-semibold opacity-60">
+                            {% if stream.class_teacher %}
+                            {{ stream.class_teacher.get_full_name }}
+                            {% else %}
+                            <span class="text-red-500">Not assigned</span>
+                            {% endif %}
+                        </div>
+                      </div>
+                      <button class="btn btn-square btn-ghost">
+                        <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+                      </button>
+                    </li>
+                    {% empty %}
+                    <li class="list-row">
+                        <div class="text-4xl font-thin opacity-30 tabular-nums">0</div>
+                        <div class="list-col-grow">
+                            <div>No streams available</div>
+                        </div>
+                        <div></div>
+                        <button class="btn btn-square btn-ghost">
+                            <span class="icon-plus"></span>
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="collapse bg-base-100 border-base-300 border">
+                    <input type="checkbox" />
+                    <div class="collapse-title">{{ class.get_name }}</div>
+                    <div class="collapse-content text-sm">
+                        {% for stream in class.streams %}
+                        <div class="card bg-base-100 mb-4">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ stream.name }}</h3>
+                                <p class="text-sm">Students enrolled: 
+                                    <span class="font-bold">{{ stream.get_enrollments.count }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 
 
     <script>
-        console.log('Management Overview Loaded');
-        const termFormData = {
-            step: 1,
-            term: {
-                number: null,
-                start_date: '',
-                end_date: '',
-                term_fees: [
-                    {
-                        amount: '',
-                        classes: []
-                    }
-                ]
-            },
-            unselected_classes: [],
-            all_classes: [],
-            loading: false,
-            selectClass(class_, fee) {
-                if (!fee.classes.includes(class_)) {
-                    fee.classes.push(class_);
-                    this.unselected_classes = this.unselected_classes.filter(c => c !== class_);
-                }
-            },
-            unselectClass(class_, fee) {
-                fee.classes = fee.classes.filter(c => c !== class_);
-                this.unselected_classes.push(class_);
-            },
-            addTermFee(){
-                this.term.term_fees.push({
-                    amount: '',
-                    classes: []
-                });
-            },
-            async fetchClasses(){
-                let response = await GET(`{% url 'api:class-list' %}`)
-                response.forEach(class_ => {
-                    this.unselected_classes.push(class_.id);
-                    this.all_classes.push(class_.id);
-                });
-            },
-            async handleSubmit(){
-                // check if start_date is before end_date
-                if (new Date(this.term.start_date) >= new Date(this.term.end_date)) {
-                    alert('Start date must be before end date.');
-                    return;
-                }
-                // check if all fees have an amount
-                if (this.term.term_fees.some(fee => !fee.amount)) {
-                    alert('All fees must have an amount.');
-                    return;
-                }
-                // check if all classes are selected
-                if (this.term.term_fees.some(fee => fee.classes.length === 0)) {
-                    alert('All fees must have at least one class selected.');
-                    return;
-                }
-                // send term data to API
-                this.loading = true;
-                console.log('Submitting term data:', this.term);
-                // convert all amounts to numbers
-                this.term.term_fees.forEach(fee => {
-                    fee.amount = parseFloat(fee.amount.replace(/[^0-9.-]+/g, ''));
-                });
-                const response = await POST(`{% url 'api:term-create' %}`, this.term, true);
-                if (response.ok) {
-                    console.log('Term created successfully!');
-                    this.term = {
-                        number: 0,
-                        start_date: '',
-                        end_date: '',
-                        term_fees: [
-                            {
-                                amount: '',
-                                classes: []
-                            }
-                        ]
-                    };
-                    this.unselected_classes = this.all_classes;
-                    this.step = 1;
-                } else {
-                    const errorData = await response.json();
-                    console.error('Error:', errorData);
-                    if(typeof errorData.detail === 'string') {
-                        console.error('Error detail:', errorData.detail);
-                    } else {
-                        let count = 0;
-                        errorData.detail.forEach(detail => {
-                            console.error(`Error ${++count}:`, detail);
-                        });
-                    }
-                    alert('An error occurred check console for details.');
-                    this.loading = false;
-                }
-            },
-            init(){
-                this.fetchClasses();
-            }
+        const classPageData = {
+            step: 1
         };
     </script>
 </c-management>
