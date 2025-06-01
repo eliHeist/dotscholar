@@ -4,7 +4,15 @@ from django.utils.translation import gettext_lazy as _
 from academics.classes.models import Class, LevelChoices
 from schools.schools.models import School
 
-# Create your models here.
+# Create a subject manager with a method to get base subjects
+class SubjectManager(models.Manager):
+    def get_base(self):
+        return self.filter(is_base=True)
+
+    def get_default(self):
+        return self.filter(is_default=True)
+    
+
 class Subject(models.Model):
     name = models.CharField(_("Name"), max_length=50)
     abbreviation = models.CharField(_("Abbreviation"), max_length=4, null=True, blank=True)
@@ -35,6 +43,8 @@ class Subject(models.Model):
         null=True,
         blank=True,
     )
+
+    objects = SubjectManager()
 
     class Meta:
         verbose_name = _("Subject")
