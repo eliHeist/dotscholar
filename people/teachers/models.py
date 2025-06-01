@@ -1,21 +1,28 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-class Teacher(models.Model):
-    school = models.ForeignKey("schools.School", verbose_name=_(""), on_delete=models.CASCADE)
+User = get_user_model()
 
-    first_name = models.CharField(_("First Name"), max_length=25)    
-    middle_name = models.CharField(_("Middle Name"), max_length=25, null=True, blank=True)    
-    last_name = models.CharField(_("Last Name"), max_length=25)
-    gender = models.CharField(_("Gender"), max_length=5)
-    
-    papers = models.ManyToManyField("subjects.Paper", verbose_name=_("Papers taught"))
+# Create your models here.
+class TeacherManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_teacher=True)
+
+    def create(self, **kwargs):
+        kwargs.setdefault('is_teacher', True)
+        return super().create(**kwargs)
+
+class Teacher(User):
+    objects = TeacherManager()
 
     class Meta:
-        verbose_name = _("teacher")
-        verbose_name_plural = _("teachers")
+        proxy = True
+        verbose_name = _("Teacher")
+        verbose_name_plural = _("Teachers")
 
-    def __str__(self):
-        return self.name
+    def save(self, *args, **kwargs):
+        # Ensure is_teacher is True when saving through the Teacher proxy
+        self.is_teacher = True
+        super().save(*args, **kwargs)
 

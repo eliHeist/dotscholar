@@ -75,6 +75,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
     is_school_owner = models.BooleanField(default=False, verbose_name=_("Is School Owner"))
+
+    is_teacher = models.BooleanField(default=False, verbose_name=_("Is Teacher"))
+
     profile = models.OneToOneField("UserProfile", verbose_name=_("Profile"), on_delete=models.CASCADE, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
@@ -120,5 +123,6 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=150, blank=True, null=True)
     gender = models.CharField(_("Gender"), max_length=1, choices=Genders.choices, default=Genders.MALE)
     phone_1 = models.CharField(max_length=20)
+    phone_2 = models.CharField(max_length=20)
     
     
