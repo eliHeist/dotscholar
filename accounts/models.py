@@ -122,7 +122,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
     gender = models.CharField(_("Gender"), max_length=1, choices=Genders.choices, default=Genders.MALE)
-    phone_1 = models.CharField(max_length=20)
-    phone_2 = models.CharField(max_length=20)
+    phone_1 = models.CharField(_("Phone (Main)"), max_length=20)
+    phone_2 = models.CharField(_("Phone (Other)"), max_length=20, null=True, blank=True)
     
     
