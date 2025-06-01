@@ -17,4 +17,8 @@ class Stream(models.Model):
 
     def __str__(self):
         return f"S.{self.current_class.number} {self.name}"
+    
+    def get_enrollments(self):
+        return self.enrollments.filter(term__active=True)
+    
 
