@@ -6,4 +6,5 @@ from .models import Stream
 class StreamSchema(ModelSchema):
     class Meta:
         model = Stream
-        model_fields = "__all__"
+        fields = "__all__"
+
