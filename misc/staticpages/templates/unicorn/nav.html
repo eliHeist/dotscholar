@@ -1,4 +1,5 @@
-<div x-data="{
+<div
+	x-data="{
     open: false,
     findActiveStatus(element, equal=false){
         
@@ -16,36 +17,71 @@
         {% comment %} set the details open attribute to false {% endcomment %}
         return false
     },
-}" class="grid">
-    <aside class="w-56 bg-white p-4 shadow">
-        <h2 class="text-xl font-bold mb-6">
-            {{ request.user.get_school.short_name }}
-        </h2>
-        <ul class="menu w-full p-0 -ml-2">
-            {% for group in permitted_menu %}
-                <li>
-                    <details>
-                        <summary class="font-semibold opacity-60">
-                            <span>{{ group.title }}</span>
-                        </summary>
-                        <ul>
-                            {% for link in group.links %}
-                                <li>
-                                    <a href="{% url link.url %}" 
-                                        :class="findActiveStatus($el{% if link.equalsParam %}, true{% endif %}) ? 'text-primary bg-primary-content font-bold' : ''">
-                                        {% if link.icon %}
-                                        <i class="{{ link.icon }}"></i>
-                                        {% else %}
-                                        <i class="icon-dot"></i>
-                                        {% endif %}
-                                        {{ link.title }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </details>
-                </li>
-            {% endfor %}
-        </ul>
-    </aside>
+}"
+	class="grid">
+	<aside class="w-56 bg-white p-4 shadow flex flex-col">
+		<h2 class="text-xl font-bold mb-6">{{ request.user.get_school.short_name }}</h2>
+		<ul class="menu w-full p-0 -ml-2 flex-1 overflow-y-auto">
+			{% for group in permitted_menu %}
+			<li>
+				<details>
+					<summary class="font-semibold opacity-60">
+						<span>{{ group.title }}</span>
+					</summary>
+					<ul>
+						{% for link in group.links %}
+						<li>
+							<a
+								href="{% url link.url %}"
+								:class="findActiveStatus($el{% if link.equalsParam %}, true{% endif %}) ? 'text-primary bg-primary-content font-bold' : ''">
+								{% if link.icon %}
+								<i class="{{ link.icon }}"></i>
+								{% else %}
+								<i class="icon-dot"></i>
+								{% endif %} {{ link.title }}
+							</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</details>
+			</li>
+			{% endfor %}
+		</ul>
+		<div>
+			<div class="flex items-center space-x-2">
+				<div class="dropdown dropdown-top">
+					<button
+						tabindex="0"
+						aria-label="Account options button"
+						class="avatar avatar-placeholder cursor-pointer">
+						<div class="bg-neutral text-neutral-content w-8 rounded-full">
+							<span class="text-xs">{{ request.user.get_initials }}</span>
+						</div>
+					</button>
+
+					<div
+						tabindex="0"
+						aria-label="Account options"
+						class="dropdown-content w-64 rounded-box bg-base-100 shadow-sm">
+						<div class="p-4">
+							<div class="grid place-content-center text-center mb-4">
+								<h2 class="text-xl font-semibold">
+									{{ request.user.get_full_name }}
+								</h2>
+								<p class="text-sm opacity-60">{{ request.user.email }}</p>
+							</div>
+							<form action="{% url 'accounts:logout' %}" method="post">
+								{% csrf_token %}
+								<button class="btn btn-soft btn-error w-full">
+									Logout <span class="icon-log-out"></span>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+                
+				<span class="font-medium text-sm">{{ request.user.get_short_name }}</span>
+			</div>
+		</div>
+	</aside>
 </div>

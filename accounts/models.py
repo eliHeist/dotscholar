@@ -106,6 +106,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_school(self):
         """Returns the school of the user"""
         return self.school
+    
+    def get_initials(self):
+        """Returns the initials of the user"""
+        initials = ""
+        if self.first_name:
+            initials += self.first_name[0].upper()
+        if self.last_name:
+            initials += self.last_name[0].upper()
+        if not initials and self.username:
+            initials = self.username[:1].upper()
+        if not initials and self.email:
+            initials = self.email[:1].upper()
+        return initials
 
     @property
     def is_staff(self):
@@ -119,8 +132,6 @@ class UserProfile(models.Model):
         MALE = "M", "Male"
         FEMALE = "F", "Female"
     
-    first_name = models.CharField(max_length=150, blank=True, null=True)
-    last_name = models.CharField(max_length=150, blank=True, null=True)
     gender = models.CharField(_("Gender"), max_length=1, choices=Genders.choices, default=Genders.MALE)
     phone_1 = models.CharField(_("Phone (Main)"), max_length=20)
     phone_2 = models.CharField(_("Phone (Other)"), max_length=20, null=True, blank=True)

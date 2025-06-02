@@ -4,40 +4,6 @@
     <div class="flex h-screen">
         {% with user=request.user %} {% unicorn 'nav' user %} {% endwith %}
     
-        <div class="flex-1 flex flex-col overflow-y-auto">
-            {% comment %} <!-- Topbar --> {% endcomment %}
-            <div class="flex justify-end items-center bg-base-100 p-2">
-                {% comment %} <button class="btn btn-sm btn-outline btn-primary mr-4">🔔</button> {% endcomment %}
-                <div class="flex items-center space-x-2">
-                    <span class="font-medium text-sm">{{ request.user.get_short_name }}</span>
-
-                    <div class="dropdown dropdown-end">
-                        <button tabindex="0" aria-label="Account options button" class="avatar avatar-placeholder cursor-pointer">
-                            <div class="bg-neutral text-neutral-content w-8 rounded-full">
-                              <span class="text-xs">UI</span>
-                            </div>
-                        </button>
-                        
-                        <div tabindex="0" aria-label="Account options" class="dropdown-content w-64 rounded-box bg-base-100 shadow-sm">
-                            <div class="p-4">
-                                <div class="grid place-content-center text-center mb-4">
-                                    <h2 class="text-xl font-semibold">{{ request.user.get_full_name }}</h2>
-                                    <p class="text-sm opacity-60">{{ request.user.email }}</p>
-                                </div>
-                                <form action="{% url 'accounts:logout' %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn btn-soft btn-error w-full">
-                                        Logout <span class="icon-log-out"></span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            {{ slot }}
-    
-        </div>
+        <div class="flex-1 flex flex-col overflow-y-auto">{{ slot }}</div>
     </div>
 </c-base>
