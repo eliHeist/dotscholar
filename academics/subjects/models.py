@@ -103,7 +103,7 @@ class Subject(models.Model):
 class Paper(models.Model):
     subject = models.ForeignKey(Subject, verbose_name=_("Subject"), on_delete=models.CASCADE, related_name="papers")
     number = models.CharField(_("Number"), max_length=2)
-    name = models.CharField(_("Name"), max_length=20, null=True, blank=True)
+    name = models.CharField(_("Name"), max_length=50, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Paper")
