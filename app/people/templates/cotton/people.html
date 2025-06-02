@@ -13,7 +13,7 @@
             return false
         },
     }">
-        <a href="{% url 'management:overview' %}" role="tab" class="tab" :class="findActiveStatus($el, true) ? 'tab-active' : ''">Overview</a>
+        <a href="{% url 'people:overview' %}" role="tab" class="tab" :class="findActiveStatus($el, true) ? 'tab-active' : ''">Overview</a>
     </div>
     <div class="px-3">
         {{ slot }}

@@ -22,8 +22,14 @@ class NavView(UnicornView):
             "links": [
                 {
                     "title": "School",
-                    "icon": "icon-grip",
+                    "icon": "icon-house-plug",
                     "url": "management:overview",
+                    "permissions": [],
+                },
+                {
+                    "title": "People",
+                    "icon": "icon-users-round",
+                    "url": "people:overview",
                     "permissions": [],
                 },
             ],
