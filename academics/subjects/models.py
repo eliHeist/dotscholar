@@ -12,11 +12,57 @@ class SubjectManager(models.Manager):
     def get_default(self):
         return self.filter(is_default=True)
     
+    def from_papers(self, papers):
+        """
+        Returns a QuerySet of Subjects, each annotated with a 'matched_papers'
+        attribute containing only the Paper objects from the provided papers
+        (list or QuerySet) that belong to that Subject.
+
+        Args:
+            papers (list or QuerySet): A list or QuerySet of Paper objects.
+
+        Returns:
+            QuerySet: A QuerySet of Subject objects, with 'matched_papers' attribute.
+        """
+        if isinstance(papers, list):
+            papers_queryset = Paper.objects.filter(pk__in=[paper.pk for paper in papers])
+        elif isinstance(papers, models.QuerySet) and papers.model == self.model._meta.get_field('papers').related_model:
+            papers_queryset = papers
+        else:
+            raise TypeError("papers must be a list or QuerySet of Paper objects.")
+
+        paper_pks = papers_queryset.values_list('pk', flat=True)
+
+        filtered_papers_prefetch = models.Prefetch(
+            'papers',
+            queryset=papers_queryset.filter(pk__in=paper_pks),
+            to_attr='matched_papers'
+        )
+
+        return (
+            self.filter(papers__pk__in=paper_pks)
+            .distinct()
+            .prefetch_related(filtered_papers_prefetch)
+        )
+    
+    def get_from_papers(self, papers):
+        subjects = []
+        for paper in papers:
+            subject = paper.subject
+            if subject not in subjects:
+                subjects.append(subject)
+        
+        for subject in subjects:
+            subject_papers = papers.filter(subject=subject)
+            subject.papers_matched = subject_papers
+
+        return subjects
+    
 
 class Subject(models.Model):
     name = models.CharField(_("Name"), max_length=50)
     abbreviation = models.CharField(_("Abbreviation"), max_length=4, null=True, blank=True)
-    code = models.CharField(_("Code"), max_length=3, unique=True)
+    code = models.CharField(_("Code"), max_length=4, unique=True)
     level = models.CharField(
         _("Level"),
         max_length=1,
@@ -71,7 +117,10 @@ class Paper(models.Model):
         return f"{self.subject.code}/{self.number}"
     
     def get_name(self):
-        return self.name or f"{self.subject.name} Paper {self.number}"
+        return self.name or ""
+    
+    def get_full_name(self):
+        return self.name or f"Paper {self.number}"
 
 
 class Category(models.Model):
@@ -88,9 +137,9 @@ class Category(models.Model):
 
 class SchoolPapersGroup(models.Model):
 
-    school = models.OneToOneField(School, verbose_name=_("School"), on_delete=models.CASCADE)
+    school = models.OneToOneField(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="paper_group")
     papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), related_name="school_papers_groups", blank=True)
-    classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="paper_groups")
+    # classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="paper_groups")
 
     class Meta:
         verbose_name = _("SchoolPapersGroup")
