@@ -7,6 +7,7 @@ from django.views import View
 
 
 User = get_user_model()
+
 class UserListView(PermissionRequiredMixin, View):
     permission_required = "accounts.view_user"
     def get(self, request, *args, **kwargs):
