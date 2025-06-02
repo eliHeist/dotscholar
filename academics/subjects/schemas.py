@@ -1,16 +1,21 @@
 # academics/subjects/schemas.py
-from ninja import ModelSchema
+from ninja import ModelSchema, Schema
 from .models import Subject, Paper
 
 
 class SubjectSchema(ModelSchema):
     class Meta:
         model = Subject
-        model_fields = ["id", "name", "abbreviation", "classes"]
+        fields = ["id", "name", "abbreviation", "classes"]
 
 
 class PaperSchema(ModelSchema):
     class Meta:
         model = Paper
-        model_fields = ["id", "code", "title"]
+        fields = "__all__"
+        
+
+class PaperRegistrationInSchema(Schema):
+    level: str
+    papers: list[int]
 
