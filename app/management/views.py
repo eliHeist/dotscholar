@@ -4,6 +4,7 @@ from django.views import View
 
 from academics.classes.models import Class
 from academics.subjects.models import Paper, Subject
+from people.teachers.models import Teacher
 from schools.terms.models import Term
 
 
@@ -42,16 +43,16 @@ class ManagementClassesView(View):
         user = request.user
         school = user.get_school()
         classes = Class.objects.all()
-        streams = school.streams.all()
 
-        # annotate each stream to a class
         for cls in classes:
-            cls.streams = streams.filter(current_class=cls)
+            cls.school_streams = cls.get_streams(school)
         
-        
+        teachers = Teacher.objects.get_by_school(school)
 
         context = {
             'classes': classes,
+            'teachers': teachers,
+            'school': school,
         }
         return render(request, self.template_name, context)
     

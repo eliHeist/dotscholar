@@ -7,7 +7,7 @@ from .models import Teacher
 teacher_router = Router(auth=django_auth)
 
 
-@teacher_router.get("", response=list[TeacherSchema])
+@teacher_router.get("", response=list[TeacherSchema], url_name="teachers-list")
 def list_teachers(request):
     """
     List all teachers.

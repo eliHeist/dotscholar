@@ -16,4 +16,7 @@ class Class(models.Model):
     
     def get_name(self):
         return f"S.{self.number}"
+    
+    def get_streams(self, school):
+        return self.streams.filter(school=school)
 

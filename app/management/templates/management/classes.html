@@ -1,178 +1,177 @@
-
 <c-management title="Classes & Streams">
-	{% comment %} <div class="p-2">
-        <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
-            <li>
-                <button class="btn" onclick="terms_modal.showModal()">Add a Term</button>
-            </li>
-        </ul>
-		<dialog id="terms_modal" class="modal" x-data="termFormData">
-			<div class="modal-box relative @container">
-                <h3 class="text-lg font-bold">Hello!</h3>
-                <div class="steps w-full mb-8">
-                    <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 1 }" @click="step = 1">Term Details</button>
-                    <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 2 }" @click="step = 2">Fees</button>
-                </div>
-                <form action="" @submit.prevent="handleSubmit">
-                    <div x-show="step === 1" class="grid gap-4 @md:grid-cols-2">
-                        <fieldset class="fieldset @md:col-span-2">
-                            <legend class="fieldset-legend">Term</legend>
-                            <select name="number" id="number" x-model="term.number" class="select w-full" required>
-                                <option value="">----</option>
-                                <option value="1">Term 1</option>
-                                <option value="2">Term 2</option>
-                                <option value="3">Term 3</option>
-                            </select>
-                            <p class="label"></p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">Start Date</legend>
-                            <input type="date" name="start_date" id="date" x-model="term.start_date" class="input w-full" required>
-                            <p class="label">Official opening date of the term.</p>
-                        </fieldset>
-                        <fieldset class="fieldset">
-                            <legend class="fieldset-legend">End Date</legend>
-                            <input type="date" name="end_date" id="date" x-model="term.end_date" class="input w-full" required>
-                            <p class="label">Official closing date of the term.</p>
-                        </fieldset>
-                        <div class="@md:col-span-2 grid mt-4">
-                            <button type="button" class="btn btn-ghost" @click="step = 2">
-                                Next
-                                <span class="icon-chevrons-right"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div x-show="step === 2" class="grid gap-4">
-                        <template x-for="fee in term.term_fees">
-                            <div class="flex gap-4">
-                                <fieldset class="fieldset">
-                                    <legend class="fieldset-legend">Amount</legend>
-                                    <input type="text" name="amount" id="date" class="input w-full" x-mask:dynamic="$money($input)" x-model="fee.amount" required>
-                                    <p class="label"></p>
-                                </fieldset>
-                                <fieldset class="fieldset flex-1">
-                                    <legend class="fieldset-legend">Classes</legend>
-                                    <div class="rounded-md border border-base-300 p-1 w-full flex gap-1 flex-wrap">
-                                        <template x-for="class_ in fee.classes">
-                                            <button type="button" class="btn btn-xs" @click="unselectClass(class_, fee)">
-                                                <span x-text="`S.${class_}`"></span>
-                                                <span class="icon-x"></span>
-                                            </button>
-                                        </template>
-                                    </div>
-                                    <p class="label flex gap-1 flex-wrap p-1">
-                                        <template x-for="class_ in unselected_classes">
-                                            <button type="button" class="btn btn-xs" @click="selectClass(class_, fee)">
-                                                <span x-text="`S.${class_}`"></span>
-                                                <span class="icon-plus"></span>
-                                            </button>
-                                        </template>
-                                    </p>
-                                </fieldset>
-                            </div>
-                        </template>
-                        <div class="grid gap-4 mt-4">
-                            <button x-show="unselected_classes.length" type="button" class="btn btn-soft btn-neutral" @click="addTermFee()">
-                                Add Fee
-                                <span class="icon-plus"></span>
-                            </button>
-                            <button class="btn btn-primary">
-                                Save
-                                <span class="icon-save"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <button type="button" aria-label="Close dialog" onclick="terms_modal.close()" class="btn btn-sm btn-ghost absolute right-2 top-2">
-                    <span class="icon-x"></span>
-                </button>
+
+	<div class="" x-data="classPageData">
+		<div class="flex justify-between">
+			<ul class="menu menu-horizontal bg-base-100 rounded-box">
+				{% for class in classes %}
+				<li>
+					<button
+						type="button"
+						@click="step = {{ forloop.counter }}"
+						:class="{ 'bg-primary text-primary-content': step == {{ forloop.counter }} }">
+						{{ class.get_name }}
+					</button>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="content">
+			{% for class in classes %}
+			<div x-show="step === {{ forloop.counter }}" class="">
+				<div class="grid gap-4">
+					<h2 class="font-semibold text-lg opacity-80 mb-8">Streams</h2>
+					<div id="streams-{{ forloop.counter }}" class="grid gap-4">
+						{% for stream in class.school_streams %}
+						<div class="card bg-base-100 shadow-sm">
+							<div class="card-body">
+								<span
+									class="badge badge-xs {% if class.level == 'O' %}badge-neutral{% else %}badge-info{% endif %}"></span>
+								<div class="flex justify-between">
+									<h3 class="text-3xl font-bold">{{ stream.name }}</h3>
+								</div>
+								<ul class="mt-6 flex flex-col gap-2 text-xs">
+									<li>
+										<span class="icon-users"></span>
+										<span>{{ stream.get_enrollments.count }} students</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+
+					<div class="drawer drawer-end">
+						<input
+							id="stream-drawer-{{ forloop.counter }}"
+							type="checkbox"
+							class="drawer-toggle" />
+						<div class="drawer-content">
+							<label
+								for="stream-drawer-{{ forloop.counter }}"
+								class="drawer-button btn btn-primary"
+								>Add a stream</label
+							>
+						</div>
+						<div class="drawer-side">
+							<label
+								for="stream-drawer-{{ forloop.counter }}"
+								aria-label="close sidebar"
+								class="drawer-overlay"></label>
+							<div>
+								<form
+									action=""
+									@submit="handleAddStream($event, {{ forloop.counter }})">
+									<input
+										type="text"
+										class="hidden"
+										value="{{ class.pk }}"
+										name="class_pk" />
+									<!-- Page content here -->
+									<fieldset class="fieldset">
+										<legend class="fieldset-legend">Stream name?</legend>
+										<label class="input">
+											{{ class.get_name }}
+											<input
+												type="text"
+												class="grow"
+												placeholder="Arts"
+												name="name" />
+										</label>
+									</fieldset>
+									<fieldset class="fieldset">
+										<legend class="fieldset-legend">Class Teacher</legend>
+										<select class="select">
+											<option disabled selected>Pick a teacher</option>
+											<template x-for="teacher in teachers">
+												<option
+													:value="teacher.id"
+													x-text="`${teacher.first_name} {teacher.last_name}`"></option>
+											</template>
+										</select>
+										<span class="label">Optional</span>
+									</fieldset>
+									<button class="btn btn-primary">
+										Add Stream
+										<span class="icon-plus"></span>
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-            <div x-show="loading" class="fixed inset-0 grid place-content-center bg-base-100 bg-opacity-50 z-20">
-                <span class="loading loading-infinity loading-xl"></span>
-            </div>
-		</dialog>
-	</div> {% endcomment %}
+			{% endfor %}
+		</div>
+	</div>
 
-    <div class="px-4" x-data="classPageData">
-        <div class="steps w-full mb-8">
-            {% for class in classes %}
-            <button type="button" class="step text-sm" :class="{ 'step-primary': step >= {{ forloop.counter }} }" @click="step = {{ forloop.counter }}">
-                <span class="step-icon">{{ class.number }}</span>
-                {{ class.get_name }}
-            </button>
-            {% endfor %}
-        </div>
+	<script>
+		const classPageData = {
+			step: 1,
+                loading: false,
+                teachers: [],
 
-        <div class="content">
-            {% for class in classes %}
-            <div x-show="step === {{ forloop.counter }}" class="card bg-base-100 mb-4">
-                <ul class="list bg-base-100 rounded-box shadow-md">
-  
-                    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Streams</li>
-                    
-                    {% for stream in class.streams %}
-                    <li class="list-row">
-                      <div class="text-4xl font-thin opacity-30 tabular-nums">{{ forloop.counter }}</div>
-                      <div class="list-col-grow">
-                        <div>{{ stream.name }}</div>
-                        <div class="text-xs uppercase font-semibold opacity-60">
-                            {{ stream.get_enrollments.count }} 
-                            {{ stream.get_enrollments.count == 1 ? 'student' : 'students' }} enrolled
-                        </div>
-                      </div>
-                      <div>
-                        <div>Class Teacher</div>
-                        <div class="text-xs uppercase font-semibold opacity-60">
-                            {% if stream.class_teacher %}
-                            {{ stream.class_teacher.get_full_name }}
-                            {% else %}
-                            <span class="text-red-500">Not assigned</span>
-                            {% endif %}
-                        </div>
-                      </div>
-                      <button class="btn btn-square btn-ghost">
-                        <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
-                      </button>
-                    </li>
-                    {% empty %}
-                    <li class="list-row">
-                        <div class="text-4xl font-thin opacity-30 tabular-nums">0</div>
-                        <div class="list-col-grow">
-                            <div>No streams available</div>
-                        </div>
-                        <div></div>
-                        <button class="btn btn-square btn-ghost">
-                            <span class="icon-plus"></span>
-                        </button>
-                    </li>
-                    {% endfor %}
-                </ul>
-                
-                <div class="collapse bg-base-100 border-base-300 border">
-                    <input type="checkbox" />
-                    <div class="collapse-title">{{ class.get_name }}</div>
-                    <div class="collapse-content text-sm">
-                        {% for stream in class.streams %}
-                        <div class="card bg-base-100 mb-4">
-                            <div class="card-body">
-                                <h3 class="card-title">{{ stream.name }}</h3>
-                                <p class="text-sm">Students enrolled: 
-                                    <span class="font-bold">{{ stream.get_enrollments.count }}</span>
-                                </p>
+                async fetchTeachers() {
+                    const response = await GET('{% url 'api:teachers-list' %}');
+                    if (!response.ok) {
+                        console.error('Error fetching teachers:', response.statusText);
+                        return;
+                    }
+                    this.teachers = await response.json();
+                },
+                async init() {
+                    await this.fetchTeachers();
+                },
+
+                async handleAddStream(event, counter) {
+                    event.preventDefault();
+                    this.loading = true;
+                    const formData = new FormData(event.target);
+                    let stream = {
+                        name: formData.get('name'),
+                        current_class: formData.get('class_pk'),
+                        class_teacher: formData.get('class_teacher') || null
+                    };
+
+                    const response = await POST('/management/classes/add_stream/', stream, true);
+
+                    if (!response.ok){
+                        {% comment %} log the error and also alert the error {% endcomment %}
+                        const error = await response.json();
+                        console.error('Error adding stream:', error);
+                        alert('Error adding stream: ' + error.message);
+                        this.loading = false;
+                        return;
+                    }
+                    const data = await response.json();
+
+                    this.createStreamHtml(data, counter);
+                    event.target.reset();
+                    const drawer = document.getElementById(`stream-drawer-${counter}`);
+                    drawer.checked = false; // Close the drawer
+
+                    this.loading = false;
+
+                },
+                createStreamHtml(stream, counter) {
+                    let card = document.createElement('div');
+                    card.className = 'card bg-base-100 shadow-sm';
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <span class="badge badge-xs ${stream.level == 'O' ? 'badge-neutral' : 'badge-info'}"></span>
+                            <div class="flex justify-between">
+                                <h3 class="text-3xl font-bold">${stream.name}</h3>
                             </div>
+                            <ul class="mt-6 flex flex-col gap-2 text-xs">
+                                <li>
+                                    <span class="icon-users"></span>
+                                    <span>${stream.get_enrollments.count} students</span>
+                                </li>
+                            </ul>
                         </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-    <script>
-        const classPageData = {
-            step: 1
-        };
-    </script>
+                    `;
+                    document.getElementById(`streams-${counter}`).appendChild(card);
+                }
+		}
+	</script>
 </c-management>
