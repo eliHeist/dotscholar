@@ -5,11 +5,11 @@
     color-scheme: "light";
 
     --color-base-100: oklch(100% 0 0); /* #ffffff - Pure white background */
-    --color-base-200: oklch(93.99% 0.0029 264.54); /* Provided base-200 */
-    --color-base-300: oklch(89.05% 0.017 215.47); /* Provided base-300 */
-    --color-base-content: oklch(15% 0.005 270); /* Dark gray for text on light backgrounds */
+    --color-base-200: oklch(93.99% 0.0029 264.54); /* #eaebed, rgb(234, 235, 237) */
+    --color-base-300: oklch(89.05% 0.017 215.47); /* #cfdee2, rgb(207, 222, 226) */
+    --color-base-content: oklch(15% 0.005 270); /* #0a0b0d, rgb(10, 11, 13) */
 
-    --color-primary: oklch(50.8% 0.0974 226.29); /* Provided primary */
+    --color-primary: oklch(50.8% 0.0974 226.29); /* #007090, rgb(0, 112, 144) */
     --color-primary-content: oklch(98% 0.005 0); /* Very light for contrast on primary */
 
     --color-secondary: oklch(67.02% 0.1181 214.66); /* Provided secondary */
