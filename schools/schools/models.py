@@ -31,6 +31,12 @@ class School(models.Model):
         Returns None if it does not exist.
         """
         return getattr(self, 'paper_group', None)
+    
+    def get_teachers(self):
+        """
+        Returns all teachers associated with the school.
+        """
+        return self.users.filter(is_teacher=True)
 
 
     
