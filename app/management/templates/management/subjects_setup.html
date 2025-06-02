@@ -74,27 +74,31 @@
 			{% for level in levels %}
 			<div x-show="level == '{{ level.code }}'">
 				<div class="subjects">
-					{% for subject in level.subjects %}
 					<ul class="list bg-base-100 rounded-box shadow-md">
 						<li class="p-4 pb-2 text-sm opacity-60 tracking-wide">
-							{{ subject.name }} - {{ subject.code }}
+							Subjects for {{ level.name }} Level
 						</li>
 
-						{% for paper in subject.matched_papers %}
+						{% for subject in level.subjects %}
 						<li class="list-row paper" data-paper-id="{{ paper.id }}">
-							<div class="text-4xl font-thin opacity-30 tabular-nums">
+							<div class="text-2xl font-thin opacity-30 tabular-nums">
 								{{ forloop.counter }}
 							</div>
 							<div class="list-col-grow">
-								<div>{{ paper.name }}</div>
-								<div class="text-xs uppercase font-semibold opacity-60">
-									{{ paper.number }}
-								</div>
+								<div>{{ subject.name }}</div>
+								<div class="font-semibold opacity-60 text-sm">{{ subject.code }}</div>
 							</div>
+                            {% for paper in subject.matched_papers %}
+                            <div class="grid items-center">
+                                {% comment %} <div>{{ paper.number }}</div> {% endcomment %}
+                                <div>{{ paper.get_full_name }}
+                                    {% if not forloop.last %},{% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
 						</li>
 						{% endfor %}
 					</ul>
-					{% endfor %}
 				</div>
 			</div>
 			{% endfor %}
@@ -184,7 +188,7 @@
 
             async submitData(data) {
                 try {
-                    const response = await PUT('', data, true)
+                    const response = await PUT('{% url 'api:register_papers' %}', data, true)
 
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
