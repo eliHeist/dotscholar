@@ -6,6 +6,7 @@ from accounts.api import user_router
 from misc.onboarding.api import onboarding_router
 from schools.streams.api import streams_router
 from schools.terms.api import terms_router
+from people.teachers.api import teacher_router
 
 
 api_router = NinjaAPI(urls_namespace="api")
@@ -16,3 +17,4 @@ api_router.add_router("/terms/", terms_router)
 api_router.add_router("/streams/", streams_router)
 api_router.add_router("/subjects/", subjects_router)
 api_router.add_router("/accounts/", user_router)
+api_router.add_router("/teachers/", teacher_router)
