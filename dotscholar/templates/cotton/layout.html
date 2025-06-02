@@ -4,7 +4,7 @@
     <div class="flex h-screen">
         {% with user=request.user %} {% unicorn 'nav' user %} {% endwith %}
     
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col overflow-y-auto">
             {% comment %} <!-- Topbar --> {% endcomment %}
             <div class="flex justify-end items-center bg-base-100 p-2">
                 {% comment %} <button class="btn btn-sm btn-outline btn-primary mr-4">🔔</button> {% endcomment %}
