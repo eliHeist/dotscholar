@@ -1,7 +1,9 @@
+from django.db import transaction
 from django.shortcuts import render
 from django.views import View
 
 from academics.classes.models import Class
+from academics.subjects.models import Paper, Subject
 from schools.terms.models import Term
 
 # Create your views here.
@@ -35,5 +37,40 @@ class ManagementClassesView(View):
 
         context = {
             'classes': classes,
+        }
+        return render(request, self.template_name, context)
+    
+
+class SubjectsSetupView(View):
+    template_name = 'management/subjects_setup.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        school = user.get_school()
+        
+        with transaction.atomic():
+            papers = school.paper_group.papers.all()
+            all_base_subjects = Subject.objects.get_base().prefetch_related('papers')
+        
+        
+        school_subjects = Subject.objects.from_papers(papers)
+        
+        levels = [
+            {
+                'code': 'O',
+                'name': 'Ordinary',
+                'subjects': school_subjects.filter(level='O')
+            },
+            {
+                'code': 'A',
+                'name': 'Advanced',
+                'subjects': school_subjects.filter(level='A')
+            }
+        ]
+
+
+        context = {
+            'levels': levels,
+            'all_base_subjects': all_base_subjects,
         }
         return render(request, self.template_name, context)
