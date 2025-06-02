@@ -17,6 +17,7 @@ def create_stream(request, payload: StreamSchema):
         return Stream.objects.create(
             name=payload.name,
             current_class=payload.current_class,
+            class_teacher=payload.class_teacher,
             school=request.user.get_school(),
         )
     except Exception as e:
