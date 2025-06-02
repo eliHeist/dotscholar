@@ -1,0 +1,200 @@
+<c-people title="Users">
+
+    <div x-data="userData" class="flex gap-4">
+        <div class="flex-1">
+            <h2 class="text-2xl font-bold mb-4">Users</h2>
+            <p class="text-sm opacity-60 mb-4">Manage users in the system.</p>
+            <!-- User List -->
+            <ul id="user-list" class="list bg-base-100 rounded-box shadow-md">
+                <li class="p-4 pb-2 text-sm opacity-60 tracking-wide">Users in system</li>
+
+                {% for user in users %}
+                <li class="list-row">
+                    <div class="text-4xl font-thin opacity-30 tabular-nums">{{ forloop.counter }}</div>
+                    <div class="list-col-grow">
+                        <div>{{ user.get_full_name }}</div>
+                        <div class="text-xs font-semibold opacity-60">{{ user.email }}</div>
+                    </div>
+                    <div class="grid gap-y-2 items-center">
+                        <div class="text-xs uppercase font-semibold opacity-60">{{ user.profile.phone_1 }}</div>
+                        {% if user.profile.phone_2 %}
+                        <div class="text-xs uppercase font-semibold opacity-60">{{ user.profile.phone_2 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="grid gap-y-2 items-center">
+                        <div class="badge badge-soft badge-neutral">Staff</div>
+                        {% if user.is_teacher %}
+                        <div class="badge badge-soft badge-success">Teacher</div>
+                        {% endif %}
+                    </div>
+                    <button class="btn btn-square btn-ghost">
+                        <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    
+        <div class="actions" aria-label="actions">
+            <div class="drawer drawer-end">
+                <input id="add-user-drawer" type="checkbox" class="drawer-toggle" />
+                <div class="drawer-content">
+                    <!-- Page content here -->
+                    <label for="add-user-drawer" class="drawer-button btn btn-primary">
+                        Add User
+                        <span class="icon-plus"></span>
+                    </label>
+                </div>
+                
+                <div class="drawer-side">
+                    <label for="add-user-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+                    <div class="p-6 w-96 h-full bg-base-100">
+                        <form @submit.prevent="submitUser" class="space-y-4">
+                            <div class="sticky top-0 z-10">
+                                <h2 class="text-lg font-semibold mb-4">Add New User</h2>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    :disabled="loading">
+                                    <span x-show="!loading">Add User</span>
+                                    <span x-show="loading" class="loading loading-infinity"></span>
+                                </button>
+                            </div>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">First Name *</legend>
+                                <input
+                                    x-model="user.first_name"
+                                    name="first_name"
+                                    type="text"
+                                    class="input"
+                                    placeholder="Type here"
+                                    required />
+                                <p class="label">Required</p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Last Name *</legend>
+                                <input
+                                    x-model="user.last_name"
+                                    name="last_name"
+                                    type="text"
+                                    class="input"
+                                    placeholder="Type here"
+                                    required />
+                                <p class="label">Required</p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Email *</legend>
+                                <input
+                                    x-model="user.email"
+                                    name="email"
+                                    type="email"
+                                    class="input"
+                                    placeholder="Type here"
+                                    required />
+                                <p class="label">Required</p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <label class="label">
+                                    <input type="checkbox" name="is_teacher" class="checkbox" x-model="user.is_teacher" />
+                                    Teacher?
+                                </label>
+                                <p class="label">Check if this User is a teacher</p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Gender *</legend>
+                                <select class="select" x-model="user.gender" @change="user.gender = $event.target.value" required>
+                                    <option value="F">Female</option>
+                                    <option value="M">Male</option>
+                                </select>
+                                <p class="label"></p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Phone 1 *</legend>
+                                <input
+                                    x-model="user.phone_1"
+                                    name="phone_1"
+                                    type="text"
+                                    class="input"
+                                    placeholder="Type here" required/>
+                                <p class="label"></p>
+                            </fieldset>
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Phone 2</legend>
+                                <input
+                                    x-model="user.phone_2"
+                                    name="phone_2"
+                                    type="text"
+                                    class="input"
+                                    placeholder="Type here" />
+                                <p class="label"></p>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="fixed inset-0 bg-base-100/50 grid place-content-center" x-show="loading">
+            <span class="loading loading-infinity loading-xl"></span>
+        </div>
+    </div>
+
+	<script>
+		userData = {
+		    user: {
+		        first_name: '',
+		        last_name: '',
+		        email: '',
+		        is_teacher: false,
+		        gender: 'F',
+		        phone_1: '',
+		        phone_2: ''
+		    },
+		    loading: false,
+            async submitUser() {
+                this.loading = true;
+                let response = await POST('{% url 'api:user-add' %}', this.user, true);
+                if (response.ok) {
+                    let user = await response.json();
+                    let userList = document.getElementById('user-list');
+                    let li = document.createElement('li');
+                    li.className = 'list-row';
+                    li.innerHTML = `
+                        <div class="text-4xl font-thin opacity-30 tabular-nums text-success">N</div>
+                        <div class="list-col-grow">
+                            <div>${user.first_name} ${user.last_name}</div>
+                            <div class="text-xs font-semibold opacity-60">${user.email}</div>
+                        </div>
+                        <div class="grid gap-y-2 items-center">
+                            <div class="text-xs uppercase font-semibold opacity-60">${user.profile.phone_1}</div>
+                            ${user.profile.phone_2 ? `<div class="text-xs uppercase font-semibold opacity-60">${user.profile.phone_2}</div>` : ''}
+                        </div>
+                        <div class="grid gap-y-2 items-center">
+                            <span class="badge badge-soft badge-neutral">Staff</span>
+                            ${user.is_teacher ? '<span class="badge badge-soft badge-success">Teacher</span>' : ''}
+                        </div>
+                        <button class="btn btn-square btn-ghost">
+                            <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+                        </button>
+                    `;
+                    userList.insertBefore(li, userList.querySelector('li.list-row:nth-child(2)')); // Insert before the first user item
+                    // Reset form and close drawer
+                    this.user = {
+                        first_name: '',
+                        last_name: '',
+                        email: '',
+                        is_teacher: false,
+                        gender: '',
+                        phone_1: '',
+                        phone_2: '',
+                    }
+                    document.getElementById('add-user-drawer').checked = false;
+                } else {
+                    alert('Failed to add user.');
+                    console.error('Error adding user:', response);
+                }
+                this.loading = false;
+            }
+		}
+	</script>
+</c-people>
