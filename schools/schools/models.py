@@ -24,6 +24,13 @@ class School(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_subjects_group(self):
+        """
+        Returns the subject group for the school using the related name 'subject_group'.
+        Returns None if it does not exist.
+        """
+        return getattr(self, 'paper_group', None)
 
 
     
