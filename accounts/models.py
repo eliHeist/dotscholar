@@ -16,6 +16,23 @@ from schools.schools.models import School
 # Create your models here.
 class UserManager(BaseUserManager):
     """Class to manage the creation of user objects"""
+    
+    def make_random_password(self, length=16):
+        """Generates a random password of given length using allowed characters"""
+        # define the allowed characters including all leters, digits, and some special characters
+        allowed_chars = (
+            'abcdefghijklmnopqrstuvwxyz'
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            '0123456789'
+            '!@#$%^&*()-_=+[]{}|;:,.<>?'
+        )
+        # use random.choice to select characters from the allowed set and join them to form a password of the specified length
+        import random
+        return ''.join(random.choice(allowed_chars) for _ in range(length))
+        
+    def get_queryset(self):
+        """Returns the queryset of users"""
+        return super().get_queryset().filter(is_active=True)
 
     def create_user(self, email, password=None, **extra_fields):
         """Creates and returns a user object
@@ -57,6 +74,12 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_teacher(self, email, password, **extra_fields):
+        user = self.create_user(email, password=password, **extra_fields)
+        user.is_teacher=True
+        user.save(using=self._db)
+        return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=25, null=True, blank=True)
@@ -78,7 +101,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_teacher = models.BooleanField(default=False, verbose_name=_("Is Teacher"))
 
-    profile = models.OneToOneField("UserProfile", verbose_name=_("Profile"), on_delete=models.CASCADE, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['email']
@@ -88,7 +110,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username or self.email
 
-    def delete(self, using=None, keep_parents=False):
+    def disable(self, using=None, keep_parents=False):
         self.is_active ^= True
         self.save()
 
@@ -120,6 +142,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             initials = self.email[:1].upper()
         return initials
 
+    def get_profile(self):
+        """Returns the user profile"""
+        return self.profile or None
     @property
     def is_staff(self):
         "Is the user a member of staff?"
@@ -131,6 +156,8 @@ class UserProfile(models.Model):
     class Genders(models.TextChoices):
         MALE = "M", "Male"
         FEMALE = "F", "Female"
+        
+    user = models.OneToOneField(User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile")
     
     gender = models.CharField(_("Gender"), max_length=1, choices=Genders.choices, default=Genders.MALE)
     phone_1 = models.CharField(_("Phone (Main)"), max_length=20)
