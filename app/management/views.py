@@ -6,7 +6,7 @@ from academics.classes.models import Class
 from academics.subjects.models import Paper, Subject
 from schools.terms.models import Term
 
-# Create your views here.
+
 class ManagementOverview(View):
     template_name = 'management/overview.html'
 
@@ -19,7 +19,22 @@ class ManagementOverview(View):
             'current_term': current_term,
         }
         return render(request, self.template_name, context)
-    
+
+
+class ManagementTermsView(View):
+    template_name = 'management/terms.html'
+
+    def get(self, request, *args, **kwargs):
+        # get active term for which this today is in 
+        user = request.user
+        school = user.get_school()
+        current_term = school.terms.filter(active=True).first()
+        context = {
+            'current_term': current_term,
+        }
+        return render(request, self.template_name, context)
+
+
 class ManagementClassesView(View):
     template_name = 'management/classes.html'
 

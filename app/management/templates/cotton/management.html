@@ -13,8 +13,9 @@
             return false
         },
     }">
-        <a href="{% url 'management:overview' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Overview</a>
+        <a href="{% url 'management:overview' %}" role="tab" class="tab" :class="findActiveStatus($el, true) ? 'tab-active' : ''">Overview</a>
         <a href="{% url 'management:subjects_setup' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Subjects</a>
+        <a href="{% url 'management:terms' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Terms</a>
         <a href="{% url 'management:classes' %}" role="tab" class="tab" :class="findActiveStatus($el) ? 'tab-active' : ''">Classes</a>
     </div>
     <div class="px-3">

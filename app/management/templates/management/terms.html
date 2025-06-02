@@ -1,0 +1,225 @@
+<c-management title="Terms">
+	<div class="p-2">
+        <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+            <li>
+                <button class="btn" onclick="terms_modal.showModal()">Add a Term</button>
+            </li>
+        </ul>
+		<dialog id="terms_modal" class="modal" x-data="termFormData">
+			<div class="modal-box relative @container">
+                <h3 class="text-lg font-bold">Hello!</h3>
+                <div class="steps w-full mb-8">
+                    <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 1 }" @click="step = 1">Term Details</button>
+                    <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 2 }" @click="step = 2">Fees</button>
+                </div>
+                <form action="" @submit.prevent="handleSubmit">
+                    <div x-show="step === 1" class="grid gap-4 @md:grid-cols-2">
+                        <fieldset class="fieldset @md:col-span-2">
+                            <legend class="fieldset-legend">Term</legend>
+                            <select name="number" id="number" x-model="term.number" class="select w-full" required>
+                                <option value="">----</option>
+                                <option value="1">Term 1</option>
+                                <option value="2">Term 2</option>
+                                <option value="3">Term 3</option>
+                            </select>
+                            <p class="label"></p>
+                        </fieldset>
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">Start Date</legend>
+                            <input type="date" name="start_date" id="date" x-model="term.start_date" class="input w-full" required>
+                            <p class="label">Official opening date of the term.</p>
+                        </fieldset>
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">End Date</legend>
+                            <input type="date" name="end_date" id="date" x-model="term.end_date" class="input w-full" required>
+                            <p class="label">Official closing date of the term.</p>
+                        </fieldset>
+                        <div class="@md:col-span-2 grid mt-4">
+                            <button type="button" class="btn btn-ghost" @click="step = 2">
+                                Next
+                                <span class="icon-chevrons-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div x-show="step === 2" class="grid gap-4">
+                        <template x-for="fee in term.term_fees">
+                            <div class="flex gap-4">
+                                <fieldset class="fieldset">
+                                    <legend class="fieldset-legend">Amount</legend>
+                                    <input type="text" name="amount" id="date" class="input w-full" x-mask:dynamic="$money($input)" x-model="fee.amount" required>
+                                    <p class="label"></p>
+                                </fieldset>
+                                <fieldset class="fieldset flex-1">
+                                    <legend class="fieldset-legend">Classes</legend>
+                                    <div class="rounded-md border border-base-300 p-1 w-full flex gap-1 flex-wrap">
+                                        <template x-for="class_ in fee.classes">
+                                            <button type="button" class="btn btn-xs" @click="unselectClass(class_, fee)">
+                                                <span x-text="`S.${class_}`"></span>
+                                                <span class="icon-x"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <p class="label flex gap-1 flex-wrap p-1">
+                                        <template x-for="class_ in unselected_classes">
+                                            <button type="button" class="btn btn-xs" @click="selectClass(class_, fee)">
+                                                <span x-text="`S.${class_}`"></span>
+                                                <span class="icon-plus"></span>
+                                            </button>
+                                        </template>
+                                    </p>
+                                </fieldset>
+                            </div>
+                        </template>
+                        <div class="grid gap-4 mt-4">
+                            <button x-show="unselected_classes.length" type="button" class="btn btn-soft btn-neutral" @click="addTermFee()">
+                                Add Fee
+                                <span class="icon-plus"></span>
+                            </button>
+                            <button class="btn btn-primary">
+                                Save
+                                <span class="icon-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <button type="button" aria-label="Close dialog" onclick="terms_modal.close()" class="btn btn-sm btn-ghost absolute right-2 top-2">
+                    <span class="icon-x"></span>
+                </button>
+			</div>
+            <div x-show="loading" class="fixed inset-0 grid place-content-center bg-base-100 bg-opacity-50 z-20">
+                <span class="loading loading-infinity loading-xl"></span>
+            </div>
+		</dialog>
+	</div>
+
+    <div class="px-3">
+        <div class="card bg-base-100">
+            <div class="card-body">
+                <span class="badge badge-xs badge-success">Current</span>
+                <div class="flex justify-between">
+                    <h2 class="text-3xl font-bold">Term {{ current_term.number }}</h2>
+                    {% comment %} <span class="text-xl">$29/mo</span> {% endcomment %}
+                </div>
+                <div class="">
+                    {% comment %} date range {% endcomment %}
+                    <p class="font-semibold opacity-60">
+                        <span class="">{{ current_term.start_date|date:"F j, Y" }}</span>
+                        <span class="">-</span>
+                        <span class="">{{ current_term.end_date|date:"F j, Y" }}</span>
+                    </p>
+                    {% comment %} days left to complete term {% endcomment %}
+                    <p class="text-sm opacity-60">
+                        {% if current_term.get_day_number %}
+                            <span class="">Day </span>
+                            <span class="">{{ current_term.get_day_number }}</span>
+                            <span class=""> of </span>
+                            <span class="">{{ current_term.get_days }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        console.log('Management Overview Loaded');
+        const termFormData = {
+            step: 1,
+            term: {
+                number: null,
+                start_date: '',
+                end_date: '',
+                term_fees: [
+                    {
+                        amount: '',
+                        classes: []
+                    }
+                ]
+            },
+            unselected_classes: [],
+            all_classes: [],
+            loading: false,
+            selectClass(class_, fee) {
+                if (!fee.classes.includes(class_)) {
+                    fee.classes.push(class_);
+                    this.unselected_classes = this.unselected_classes.filter(c => c !== class_);
+                }
+            },
+            unselectClass(class_, fee) {
+                fee.classes = fee.classes.filter(c => c !== class_);
+                this.unselected_classes.push(class_);
+            },
+            addTermFee(){
+                this.term.term_fees.push({
+                    amount: '',
+                    classes: []
+                });
+            },
+            async fetchClasses(){
+                let response = await GET(`{% url 'api:class-list' %}`)
+                response.forEach(class_ => {
+                    this.unselected_classes.push(class_.id);
+                    this.all_classes.push(class_.id);
+                });
+            },
+            async handleSubmit(){
+                // check if start_date is before end_date
+                if (new Date(this.term.start_date) >= new Date(this.term.end_date)) {
+                    alert('Start date must be before end date.');
+                    return;
+                }
+                // check if all fees have an amount
+                if (this.term.term_fees.some(fee => !fee.amount)) {
+                    alert('All fees must have an amount.');
+                    return;
+                }
+                // check if all classes are selected
+                if (this.term.term_fees.some(fee => fee.classes.length === 0)) {
+                    alert('All fees must have at least one class selected.');
+                    return;
+                }
+                // send term data to API
+                this.loading = true;
+                console.log('Submitting term data:', this.term);
+                // convert all amounts to numbers
+                this.term.term_fees.forEach(fee => {
+                    fee.amount = parseFloat(fee.amount.replace(/[^0-9.-]+/g, ''));
+                });
+                const response = await POST(`{% url 'api:term-create' %}`, this.term, true);
+                if (response.ok) {
+                    console.log('Term created successfully!');
+                    this.term = {
+                        number: 0,
+                        start_date: '',
+                        end_date: '',
+                        term_fees: [
+                            {
+                                amount: '',
+                                classes: []
+                            }
+                        ]
+                    };
+                    this.unselected_classes = this.all_classes;
+                    this.step = 1;
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
+                    if(typeof errorData.detail === 'string') {
+                        console.error('Error detail:', errorData.detail);
+                    } else {
+                        let count = 0;
+                        errorData.detail.forEach(detail => {
+                            console.error(`Error ${++count}:`, detail);
+                        });
+                    }
+                    alert('An error occurred check console for details.');
+                    this.loading = false;
+                }
+            },
+            init(){
+                this.fetchClasses();
+            }
+        };
+    </script>
+</c-management>
