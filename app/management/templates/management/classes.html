@@ -18,7 +18,7 @@
 
 		<div class="content">
 			{% for class in classes %}
-			<div x-show="step === {{ forloop.counter }}" class="">
+			<div x-show="step === {{ forloop.counter }}" x-cloak class="">
 				<div class="grid gap-4">
 					<h2 class="font-semibold text-lg opacity-80 mb-8">Streams</h2>
 					<div id="streams-{{ forloop.counter }}" class="grid gap-4">
@@ -58,9 +58,8 @@
 								for="stream-drawer-{{ forloop.counter }}"
 								aria-label="close sidebar"
 								class="drawer-overlay"></label>
-							<div>
-								<form
-									action=""
+							<div class="bg-base-100 h-full p-4 w-96 overflow-y-auto">
+								<form action=""
 									@submit="handleAddStream($event, {{ forloop.counter }})">
 									<input
 										type="text"
@@ -71,7 +70,7 @@
 									<fieldset class="fieldset">
 										<legend class="fieldset-legend">Stream name?</legend>
 										<label class="input">
-											{{ class.get_name }}
+											<span class="opacity-60">{{ class.get_name }}</span>
 											<input
 												type="text"
 												class="grow"
@@ -81,17 +80,17 @@
 									</fieldset>
 									<fieldset class="fieldset">
 										<legend class="fieldset-legend">Class Teacher</legend>
-										<select class="select">
+										<select class="select" name="class_teacher">
 											<option disabled selected>Pick a teacher</option>
 											<template x-for="teacher in teachers">
 												<option
 													:value="teacher.id"
-													x-text="`${teacher.first_name} {teacher.last_name}`"></option>
+													x-text="`${teacher.first_name} ${teacher.last_name}`"></option>
 											</template>
 										</select>
 										<span class="label">Optional</span>
 									</fieldset>
-									<button class="btn btn-primary">
+									<button class="btn btn-primary w-full mt-4">
 										Add Stream
 										<span class="icon-plus"></span>
 									</button>
@@ -103,6 +102,10 @@
 			</div>
 			{% endfor %}
 		</div>
+
+		<div class="fixed inset-0 bg-base-100/50 grid place-content-center" x-show="loading">
+            <span class="loading loading-infinity loading-xl"></span>
+        </div>
 	</div>
 
 	<script>
@@ -112,12 +115,14 @@
                 teachers: [],
 
                 async fetchTeachers() {
-                    const response = await GET('{% url 'api:teachers-list' %}');
-                    if (!response.ok) {
-                        console.error('Error fetching teachers:', response.statusText);
+                    const response = await GET('{% url 'api:teachers-list' %}', true);
+                    if (!response.status) {
+						console.log(response)
+						console.error('Error fetching teachers:', response.statusText);
                         return;
                     }
                     this.teachers = await response.json();
+					console.log(this.teachers)
                 },
                 async init() {
                     await this.fetchTeachers();
@@ -133,7 +138,9 @@
                         class_teacher: formData.get('class_teacher') || null
                     };
 
-                    const response = await POST('/management/classes/add_stream/', stream, true);
+					console.log(stream)
+
+                    const response = await POST('{% url 'api:stream-create' %}', stream, true);
 
                     if (!response.ok){
                         {% comment %} log the error and also alert the error {% endcomment %}
@@ -165,7 +172,7 @@
                             <ul class="mt-6 flex flex-col gap-2 text-xs">
                                 <li>
                                     <span class="icon-users"></span>
-                                    <span>${stream.get_enrollments.count} students</span>
+                                    <span>${stream.enrollments_count} students</span>
                                 </li>
                             </ul>
                         </div>

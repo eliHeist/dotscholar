@@ -2,22 +2,26 @@ from ninja import Router
 from ninja.errors import HttpError
 from ninja.security import django_auth
 
-from .schemas import StreamSchema
+from academics.classes.models import Class
+from people.teachers.models import Teacher
+
+from .schemas import StreamSchema, StreamInSchema
 from .models import Stream
 
 
 streams_router = Router(auth=django_auth)
 
 @streams_router.post("", response=StreamSchema, url_name="stream-create")
-def create_stream(request, payload: StreamSchema):
-    """
-    Create a new stream.
-    """
+def create_stream(request, payload: StreamInSchema):
+    print(payload)
     try:
+        class_ = Class.objects.get(pk=payload.current_class)
+        teacher = Teacher.objects.get(pk=payload.class_teacher)
+
         return Stream.objects.create(
             name=payload.name,
-            current_class=payload.current_class,
-            class_teacher=payload.class_teacher,
+            current_class=class_,
+            current_class_teacher=teacher,
             school=request.user.get_school(),
         )
     except Exception as e:

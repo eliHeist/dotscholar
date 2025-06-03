@@ -30,3 +30,7 @@
 .btn {
     box-shadow: none;
 }
+
+[x-cloak]{
+    display: none;
+}
