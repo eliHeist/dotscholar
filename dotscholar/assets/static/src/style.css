@@ -4,8 +4,8 @@
 
 @plugin "@tailwindcss/container-queries";
 @plugin "daisyui" {
-    /* themes: custom-light --default, custom-dark --prefersdark; */
-    themes: custom-light --default;
+	/* themes: custom-light --default, custom-dark --prefersdark; */
+	themes: custom-light --default;
 }
 
 @import "./css/_theme_light.css";
@@ -14,23 +14,53 @@
 @import "lucide-static/font/lucide.css";
 
 @font-face {
-    font-family: "lucide";
-    src: url('./lucide.eot?t=1747396755572'); /* IE9*/
-    src: url('./lucide.eot?t=1747396755572#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url("./lucide.woff2?t=1747396755572") format("woff2"),
-    url("./lucide.woff?t=1747396755572") format("woff"),
-    url('./lucide.ttf?t=1747396755572') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-    url('./lucide.svg?t=1747396755572#lucide') format('svg'); /* iOS 4.1- */
+	font-family: "lucide";
+	src: url("./lucide.eot?t=1747396755572"); /* IE9*/
+	src: url("./lucide.eot?t=1747396755572#iefix") format("embedded-opentype"),
+		/* IE6-IE8 */ url("./lucide.woff2?t=1747396755572") format("woff2"),
+		url("./lucide.woff?t=1747396755572") format("woff"),
+		url("./lucide.ttf?t=1747396755572") format("truetype"),
+		/* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+			url("./lucide.svg?t=1747396755572#lucide") format("svg"); /* iOS 4.1- */
 }
 
-:root{
-    font-family: "Plus Jakarta Sans", sans-serif;
+:root {
+	font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .btn {
-    box-shadow: none;
+	box-shadow: none;
 }
 
-[x-cloak]{
-    display: none;
+[x-cloak] {
+	display: none;
+}
+
+
+/* loading indicator for x-alpine requests */
+[aria-busy] {
+	--loading-size: 64px;
+	--loading-stroke: 6px;
+	--loading-duration: 1s;
+	position: relative;
+	opacity: 0.75;
+}
+[aria-busy]:before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: var(--loading-size);
+	height: var(--loading-size);
+	margin-top: calc(var(--loading-size) / 2 * -1);
+	margin-left: calc(var(--loading-size) / 2 * -1);
+	border: var(--loading-stroke) solid rgba(0, 0, 0, 0.15);
+	border-radius: 50%;
+	border-top-color: rgba(0, 0, 0, 0.5);
+	animation: rotate calc(var(--loading-duration)) linear infinite;
+}
+@keyframes rotate {
+	100% {
+		transform: rotate(360deg);
+	}
 }
