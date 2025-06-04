@@ -1,0 +1,66 @@
+<div class="card bg-base-100 shadow-sm max-w-64" x-sync id="stream-{{ stream.id }}-card">
+	<div class="card-body">
+		<div class="flex justify-between">
+			<h3 class="text-xl font-bold">{{ stream.name }}</h3>
+			<button
+				class="btn btn-xs btn-ghost btn-square"
+				onclick="stream_modal_{{ stream.pk }}.showModal()">
+				<span class="icon-square-pen"></span>
+			</button>
+		</div>
+		<ul class="mt-6 flex flex-col gap-2 text-xs">
+			<li>
+				<span class="icon-users"></span>
+				<span>{{ stream.get_enrollments.count }} students</span>
+			</li>
+		</ul>
+	</div>
+	<dialog id="stream_modal_{{ stream.pk }}" class="modal">
+		<div class="modal-box max-w-80">
+			<form x-data="{
+					stream:{
+						id: {{ stream.pk }},
+						name: `{{ stream.name }}`,
+						class_teacher: `{{ stream.class_teacher.pk }}`
+					}
+				}" @submit.prevent="$ajax('{% url 'management:classes' %}', {
+					method: 'put',
+					body: { stream },
+					target: 'stream-{{ stream.id }}-card',
+					headers: {
+						'X-CSRFToken': csrf(),
+					}
+				})">
+				{% csrf_token %}
+				<input type="text" class="hidden" value="{{ stream.pk }}" name="stream_pk" />
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Stream name?</legend>
+					<label class="input">
+						<span class="opacity-60">{{ stream.current_class.get_name }}</span>
+						<input type="text" class="grow" x-model="stream.name" placeholder="Arts" name="name" />
+					</label>
+				</fieldset>
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Class Teacher</legend>
+					<select class="select" name="class_teacher" x-model="stream.class_teacher">
+						<option disabled selected>Pick a teacher</option>
+						{% for teacher in teachers %}
+						<option value="{{ teacher.pk }}" 
+							{% if stream.current_class_teacher == teacher %}selected{% endif %}>
+							{{ teacher.get_full_name }}
+						</option>
+						{% endfor %}
+					</select>
+					<span class="label"></span>
+				</fieldset>
+				<button class="btn btn-primary w-full mt-4">
+					Update Stream
+					<span class="icon-cloud-upload"></span>
+				</button>
+			</form>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+</div>
