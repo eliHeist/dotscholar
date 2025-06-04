@@ -12,7 +12,7 @@ class Stream(models.Model):
     school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="streams")
     current_class = models.ForeignKey(Class, verbose_name=_("Class"), related_name="streams", on_delete=models.CASCADE)
 
-    current_class_teacher = models.ForeignKey(
+    class_teacher = models.ForeignKey(
         Teacher, 
         verbose_name=_("Current Class Teacher"), 
         related_name="streams", 
