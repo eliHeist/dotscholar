@@ -18,26 +18,12 @@
 
 		<div class="content">
 			{% for class in classes %}
-			<div x-show="step === {{ forloop.counter }}" x-cloak class="">
+			<div x-show="step === {{ forloop.counter }}" x-cloak class="flex">
 				<div class="grid gap-4">
-					<h2 class="font-semibold text-lg opacity-80 mb-8">Streams</h2>
-					<div id="streams-{{ forloop.counter }}" class="grid gap-4">
+					<h2 class="font-semibold text-lg opacity-80 mt-4">Streams</h2>
+					<div id="streams-{{ forloop.counter }}" x-merge="append" class="grid gap-4">
 						{% for stream in class.school_streams %}
-						<div class="card bg-base-100 shadow-sm">
-							<div class="card-body">
-								<span
-									class="badge badge-xs {% if class.level == 'O' %}badge-neutral{% else %}badge-info{% endif %}"></span>
-								<div class="flex justify-between">
-									<h3 class="text-3xl font-bold">{{ stream.name }}</h3>
-								</div>
-								<ul class="mt-6 flex flex-col gap-2 text-xs">
-									<li>
-										<span class="icon-users"></span>
-										<span>{{ stream.get_enrollments.count }} students</span>
-									</li>
-								</ul>
-							</div>
-						</div>
+						{% include 'management/fragments/stream-card.html' %}
 						{% endfor %}
 					</div>
 
@@ -59,8 +45,9 @@
 								aria-label="close sidebar"
 								class="drawer-overlay"></label>
 							<div class="bg-base-100 h-full p-4 w-96 overflow-y-auto">
-								<form action=""
-									@submit="handleAddStream($event, {{ forloop.counter }})">
+								<form method="post" x-target="streams-{{ forloop.counter }}"
+									@xsubmit="handleAddStream($event, {{ forloop.counter }})">
+									{% csrf_token %}
 									<input
 										type="text"
 										class="hidden"
@@ -82,11 +69,9 @@
 										<legend class="fieldset-legend">Class Teacher</legend>
 										<select class="select" name="class_teacher">
 											<option disabled selected>Pick a teacher</option>
-											<template x-for="teacher in teachers">
-												<option
-													:value="teacher.id"
-													x-text="`${teacher.first_name} ${teacher.last_name}`"></option>
-											</template>
+											{% for teacher in teachers %}
+											<option value="{{ teacher.pk }}">{{ teacher.get_full_name }}</option>
+											{% endfor %}
 										</select>
 										<span class="label">Optional</span>
 									</fieldset>
@@ -99,6 +84,7 @@
 						</div>
 					</div>
 				</div>
+				
 			</div>
 			{% endfor %}
 		</div>
