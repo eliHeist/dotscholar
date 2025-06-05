@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
+
 User = get_user_model()
 
 # Create your models here.
@@ -38,4 +39,5 @@ class Teacher(User):
         Returns all subjects taught by the teacher.
         """
         return 0
+
 

@@ -36,7 +36,7 @@ class SubjectManager(models.Manager):
         filtered_papers_prefetch = models.Prefetch(
             'papers',
             queryset=papers_queryset.filter(pk__in=paper_pks),
-            to_attr='matched_papers'
+            to_attr='allowed_papers'
         )
 
         return (
@@ -44,6 +44,19 @@ class SubjectManager(models.Manager):
             .distinct()
             .prefetch_related(filtered_papers_prefetch)
         )
+    
+    def get_base(self):
+        return self.filter(is_base=True)
+    
+    def get_available_for_school(self, school: School):
+        base_subjects = self.get_base()
+        school_subjects = self.filter(school=school)
+        # return both sets in one queryset
+        return base_subjects | school_subjects
+    
+    def get_for_school(self, school: School):
+        school_papers = school.paper_group.papers.all()
+        return self.from_papers(school_papers)
     
     def get_from_papers(self, papers):
         subjects = []
@@ -103,7 +116,7 @@ class Subject(models.Model):
 class Paper(models.Model):
     subject = models.ForeignKey(Subject, verbose_name=_("Subject"), on_delete=models.CASCADE, related_name="papers")
     number = models.CharField(_("Number"), max_length=2)
-    name = models.CharField(_("Name"), max_length=50, null=True, blank=True)
+    name = models.CharField(_("Name"), max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name = _("Paper")
@@ -135,10 +148,29 @@ class Category(models.Model):
         return self.name
 
 
-class SchoolPapersGroup(models.Model):
+class SchoolPaperAssignment(models.Model):
+    school_papers_group = models.ForeignKey('SchoolPapersGroup', on_delete=models.CASCADE, related_name='paper_assignments')
+    paper = models.ForeignKey('Paper', on_delete=models.CASCADE, related_name='school_assignments')
+    is_compulsory = models.BooleanField(_('Is Compulsory'), default=False)
 
+    class Meta:
+        unique_together = (('school_papers_group', 'paper'),)
+        verbose_name = _('School Paper Assignment')
+        verbose_name_plural = _('School Paper Assignments')
+
+    def __str__(self):
+        return f"{self.paper} ({'Compulsory' if self.is_compulsory else 'Optional'}) - {self.get_level_display()}"
+
+class SchoolPapersGroup(models.Model):
     school = models.OneToOneField(School, verbose_name=_("School"), on_delete=models.CASCADE, related_name="paper_group")
-    papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), related_name="school_papers_groups", blank=True)
+    papers = models.ManyToManyField(
+        Paper,
+        verbose_name=_("Papers"),
+        related_name="school_papers_groups",
+        blank=True,
+        through='SchoolPaperAssignment',
+        through_fields=('school_papers_group', 'paper'),
+    )
     # classes = models.ManyToManyField(Class, verbose_name=_("Classes"), related_name="paper_groups")
 
     class Meta:
@@ -146,7 +178,7 @@ class SchoolPapersGroup(models.Model):
         verbose_name_plural = _("SchoolPapersGroups")
 
     def __str__(self):
-        return self.name
+        return f"{self.school.name} Papers Group"
 
 
 
