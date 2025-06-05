@@ -37,3 +37,6 @@ class PeopleUserView(LoginRequiredMixin, View):
             'users': users,
         }
         return render(request, self.template_name, context)
+
+
+
