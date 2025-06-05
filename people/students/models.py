@@ -20,12 +20,16 @@ class Student(models.Model):
     last_name = models.CharField(_("Last Name"), max_length=25)
     gender = models.CharField(_("Gender"), max_length=1, choices=GenderOptions.choices)
     payment_code = models.CharField(_("Payment Code"), max_length=50)
+    lin = models.CharField(_("Learners Identification Number"), max_length=50, null=True, blank=True)
     
     current_optional_papers = models.ManyToManyField(Paper, verbose_name=_("Optional Papers"), blank=True, related_name="current_students")
+    
+    active = models.BooleanField(_("Active"), default=True)
 
     class Meta:
         verbose_name = _("Student")
         verbose_name_plural = _("Students")
+        unique_together = ("school", "payment_code")
     
     def get_full_name(self):
         return f"{self.first_name} {self.middle_name} {self.last_name}"
