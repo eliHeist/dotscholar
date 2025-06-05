@@ -1,221 +1,157 @@
 <c-management title="Subjects">
-	<div x-data="subjectsData" class="flex gap-4">
-		{% comment %} list all the school subjects each with the papers it has, using daisy ui
-		components {% endcomment %}
-        <div class="actions" aria-label="actions">
-            <div role="tablist" class="tabs tabs-box mb-8">
-                {% for level in levels %}
-                <button
-                    role="tab"
-                    class="tab"
-                    :class="level == '{{ level.code }}' ? 'tab-active' : ''"
-                    @click="level='{{ level.code }}'">
-                    {{ level.name }}
-                </button>
-                {% endfor %}
-            </div>
-            <div class="drawer drawer-end">
-                <input id="{{ level.code }}level-drawer" type="checkbox" class="drawer-toggle" />
-                <div class="drawer-content">
-                    <!-- Page content here -->
-                    <label for="{{ level.code }}level-drawer" class="drawer-button btn btn-primary">
-                        Register Papers
-                        <span class="icon-plus"></span>
+    <div x-data="subjectsData" class="grid gap-4 pb-4">
+        {% comment %} list all the school subjects each with the papers it has, using daisy ui
+        components {% endcomment %}
+        <div class="actions sticky top-0" aria-label="actions">
+            <div class="flex justify-between">
+                <div class="flex gap-4 items-center">
+                    <div role="tablist" class="tabs tabs-box">
+                        <button type="button" role="tab" class="tab" :class="show_level == 'O' ? 'tab-active' : ''" @click="show_level = 'O'">
+                            O Level
+                        </button>
+                        <button type="button" role="tab" class="tab" :class="show_level == 'A' ? 'tab-active' : ''" @click="show_level = 'A'">
+                            A Level
+                        </button>
+                    </div>
+                    <label>
+                        <input type="checkbox" class="checkbox" x-model="show_unregistered_papers" />
+                        <span>Unregistered Papers</span>
                     </label>
                 </div>
-                <div class="drawer-side">
-                    <label
-                        for="{{ level.code }}level-drawer"
-                        aria-label="close sidebar"
-                        class="drawer-overlay"></label>
-                    <div class="bg-base-100 h-full p-4 w-96 overflow-y-auto">
-                        <form class="relative" method="post" @submit="handleSubmit($event)">
-                            <div class="sticky top-0">
-                                <h2 class="text-lg font-semibold mb-4">Register Papers for {{ level.name }}</h2>
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    :disabled="loading">
-                                    <span x-show="!loading">Register</span>
-                                    <span x-show="loading" class="loading loading-infinity"></span>
-                                </button>
-                            </div>
-                            {% comment %} create a tree view of subject and papers for each subject in unregistered_papers, the papers have checkboxes that can be checked {% endcomment %}
-                            <template x-for="subject in unregistered_papers">
-                                <template x-if="subject.level == level">
-                                    <ul class="menu w-full -mx-4">
-                                        <li>
-                                            <h2 class="menu-title" x-text="`${subject.code}: ${subject.name}`">Title</h2>
-                                            <ul>
-                                                <template x-for="paper in subject.papers">
-                                                    <li class="focus-visible:bg-transparent">
-                                                        <label class="cursor-pointer">
-                                                            <input
-                                                                type="checkbox"
-                                                                :value="paper.id"
-                                                                name="papers"
-                                                                x-model="registered_papers"
-                                                                class="checkbox checkbox-primary mr-2" />
-                                                            <span x-text="`${paper.number} - ${paper.name}`"></span>
-                                                        </label>
-                                                    </li>
-                                                </template>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </template>
-                            </template>
-                        </form>
-                    </div>
-                </div>
+                <button type="button" @click="submit()" class="btn btn-primary">
+                    <span class="icon-save"></span>
+                    Save
+                </button>
             </div>
         </div>
-		<div class="grid gap-4 flex-1">
-			{% for level in levels %}
-			<div x-show="level == '{{ level.code }}'">
-				<div class="subjects">
-					<ul class="list bg-base-100 rounded-box shadow-md">
-						<li class="p-4 pb-2 text-sm opacity-60 tracking-wide">
-							Subjects for {{ level.name }} Level
-						</li>
-
-						{% for subject in level.subjects %}
-						<li class="list-row paper" data-paper-id="{{ paper.id }}">
-							<div class="text-2xl font-thin opacity-30 tabular-nums">
-								{{ forloop.counter }}
-							</div>
-							<div class="list-col-grow">
-								<div>{{ subject.name }}</div>
-								<div class="font-semibold opacity-60 text-sm">{{ subject.code }}</div>
-							</div>
-                            {% for paper in subject.matched_papers %}
-                            <div class="grid items-center">
-                                {% comment %} <div>{{ paper.number }}</div> {% endcomment %}
-                                <div>{{ paper.get_full_name }}
-                                    {% if not forloop.last %},{% endif %}
-                                </div>
-                            </div>
-                            {% endfor %}
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+        <div class="grid gap-4 flex-1">
+            <table class="table bg-base-100">
+                <thead>
+                    <tr>
+                        <th>
+                            {% comment %} <label>
+                                <input type="checkbox" class="checkbox" />
+                            </label> {% endcomment %}
+                        </th>
+                        <th>Subject</th>
+                        <th>Code</th>
+                        <th>Paper</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <template x-for="subject in all_subjects">
+                    <template x-for="paper in subject.papers">
+                        <tr x-show="show_level == subject.level && (registered_papers.includes(paper.id) || show_unregistered_papers)" x-cloak>
+                            <td>
+                                <label>
+                                    <input type="checkbox" class="checkbox" x-model="paper.is_selected"
+                                        @change="togglePaper(paper)" />
+                                </label>
+                            </td>
+                            <td x-text="subject.name"></td>
+                            <td>
+                                <span x-text="subject.code"></span>
+                                <span>/</span>
+                                <span x-text="paper.number"></span>
+                            </td>
+                            <td x-text="paper.name || `Paper ${paper.number}`"></td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" class="checkbox" x-model="paper.is_compulsory" />
+                                    <span>Compulsory</span>
+                                </label>
+                            </td>
+                        </tr>
+                    </template>
+                </template>
+            </table>
+        </div>
         <div class="fixed inset-0 bg-base-100/50 grid place-content-center" x-show="loading">
             <span class="loading loading-infinity loading-xl"></span>
         </div>
-	</div>
+    </div>
 
-	<script>
-		const subjectsData = {
-		    level: "O",
-		    registered_papers: [],
-		    unregistered_papers: [],
-		    subjects: [
-		        {% for subject in all_base_subjects %}
-		        {
-		            id: "{{ subject.id }}",
-		            name: "{{ subject.name }}",
-		            code: "{{ subject.code }}",
-		            level: "{{ subject.level }}",
-		            papers: [
-		                {% for paper in subject.papers.all %}
-		                {
-		                    id: "{{ paper.id }}",
-		                    name: "{{ paper.get_full_name }}",
-		                    number: "{{ paper.number }}"
-		                }{% if not forloop.last %},{% endif %}
-		                {% endfor %}
-		            ]
-		        }{% if not forloop.last %},{% endif %}
-		        {% endfor %}
-		    ],
-		    get_registered_papers_from_html() {
-		        {% comment %} get paper ids from all .paper elements and append them to self.registered_papers list {% endcomment %}
-		        this.registered_papers = [];
-		        document.querySelectorAll('.paper').forEach(paper => {
-		            this.registered_papers.push(paper.getAttribute('data-paper-id'));
-		        });
-		    },
-
-		    get_unregistered_papers() {
-		        {% comment %} return a list subjects each with papers that are not registered {% endcomment %}
-                return this.subjects.map(subject => {
-                    return {
-                        ...subject,
-                        papers: subject.papers.filter(paper => !this.registered_papers.includes(paper.id))
-                    };
-                }).filter(subject => subject.papers.length > 0);
-		    },
-
+    <script>
+        const subjectsData = {
             loading: false,
-            async handleSubmit(event) {
+            show_level: 'O',
+            show_unregistered_papers: false,
 
-                {% comment %} get the values of the checked checkboxes in the submitted form {% endcomment %}
+            registered_papers: [],
+            all_subjects: [],
+            papers_to_add: [],
+            papers_to_remove: [],
 
-                event.preventDefault();
-                this.loading = true;
-                try {
-                    const form = event.target;
-                    const formData = new FormData(form);
-                    const selectedPapers = formData.getAll('papers');
-                    if (selectedPapers.length === 0) {
-                        alert('Please select at least one paper to register.');
-                        return;
-                    }
-
-                    {% comment %} convert selectedPapers to integers {% endcomment %}
-
-                    const convertedPapers = selectedPapers.map(paper => parseInt(paper, 10));
-                    if (convertedPapers.some(isNaN)) {
-                        throw new Error('Invalid paper IDs selected.');
-                    }
-                    const data = {
-                        papers: convertedPapers,
-                        level: this.level
-                    };
-                    console.log('Submitting papers:', data);
-
-                    this.submitData(data);
+            togglePaper(paper) {
+                if (paper.is_selected && this.papers_to_remove.includes(paper)) {
+                    this.papers_to_remove.splice(this.papers_to_remove.indexOf(paper), 1)
                 } 
-                catch (error) {
-                    console.error('Form validation failed:', error);
-                    this.loading = false;
+                else if (!paper.is_selected && this.registered_papers.includes(paper.id)) {
+                    this.papers_to_remove.push(paper)
+                    paper.is_compulsory = false
+                }
+                else if (!paper.is_selected && !this.registered_papers.includes(paper.id)) {
+                    paper.is_compulsory = false
                 }
             },
 
-            async submitData(data) {
-                try {
-                    const response = await PUT('{% url 'api:register_papers' %}', data, true)
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
-                    const result = await response.json();
-                    console.log('Papers registered successfully:', result);
-
-                    {% comment %} refresh the page {% endcomment %}
-                    window.location.reload();
-
-                } catch (error) {
-                    console.error('Error registering papers:', error);
+            isPaperShown(paper){
+                if (this.registered_papers.includes(paper.id)) {
+                    return true
                 }
-                this.loading = false;
+                return show_unregistered_papers
             },
 
+            async submit() {
+                // return this kind of data [{"paper_id": 0,"is_compulsory": true},..]
+                this.loading = true
+                this.papers_to_add = this.all_subjects.flatMap((subject) => {
+                    return subject.papers.filter((paper) => {
+                        return paper.is_selected
+                    }).map((paper) => {
+                        return {
+                            paper_id: paper.id,
+                            is_compulsory: paper.is_compulsory
+                        }
+                    })
+                })
+                
+                const response = await POST("{% url 'api:manage_school_papers' %}", this.papers_to_add, true)
 
-		    init(){
-		        this.get_registered_papers_from_html();
+                if (!response.ok){
+                    const error = await response.json();
+                    console.error('Error adding stream:', error);
+                    alert('Error adding stream: ' + error.message);
+                    return;
+                }
 
-		        this.unregistered_papers = this.get_unregistered_papers();
+                let new_registered_papers = []
 
-		        console.log(this.subjects);
-		        console.log(this.unregistered_papers);
+                this.papers_to_add.forEach((paper) => {
+                    new_registered_papers.push(paper.paper_id)
+                })
 
-		    }
-		};
-	</script>
+                this.registered_papers = new_registered_papers
+
+                this.loading = false
+            },
+
+            async init() {
+                const registered_papers = await GET("{% url 'api:get_school_papers' %}")
+                this.all_subjects = await GET("{% url 'api:all_subjects' %}")
+                this.all_subjects.forEach((subject) => {
+                    subject.papers.forEach((paper) => {
+                        paper.is_compulsory = registered_papers.some(
+                            (item) => item.paper_id == paper.id && item.is_compulsory
+                        )
+                        paper.is_selected = registered_papers.some((item) => item.paper_id == paper.id)
+                        paper.remove = false
+                    })
+                })
+                registered_papers.forEach((item) => {
+                    this.registered_papers.push(item.paper_id)
+                })
+            },
+        }
+    </script>
 </c-management>
