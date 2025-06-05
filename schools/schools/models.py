@@ -37,6 +37,12 @@ class School(models.Model):
         Returns all teachers associated with the school.
         """
         return self.users.filter(is_teacher=True)
+    
+    def get_active_term(self):
+        """
+        Returns the active term for the school.
+        """
+        return self.terms.filter(active=True).first()
 
 
     
