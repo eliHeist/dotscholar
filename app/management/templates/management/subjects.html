@@ -1,0 +1,59 @@
+<c-management title="Subjects">
+	<div x-data="subjectsData" class="flex gap-4">
+		{% comment %} list all the school subjects each with the papers it has, using daisy ui
+		components {% endcomment %}
+        <div class="actions" aria-label="actions">
+            <div class="grid gap-4">
+                <div role="tablist" class="tabs tabs-box">
+                    {% for level in levels %}
+                    <button
+                        role="tab"
+                        class="tab"
+                        :class="level == '{{ level.code }}' ? 'tab-active' : ''"
+                        @click="level='{{ level.code }}'">
+                        {{ level.name }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'management:subjects_setup' %}" class="btn btn-neutral">
+                    <span class="icon-settings"></span>
+                    Setup Subjects
+                </a>
+            </div>
+        </div>
+		<div class="grid gap-4 flex-1">
+			{% for level in levels %}
+			<div x-show="level == '{{ level.code }}'">
+				<div class="subjects">
+                    {% for subject in level.subjects %}
+                    <div class="card bg-base-300">
+                        <div class="card-body">
+                            <h2 class="card-header">{{ subject.name }}</h2>
+                            <ul class="list bg-base-100 rounded-box">
+                                <li class="p-4 pb-2 text-sm opacity-60 tracking-wide">Papers</li>
+                                {% for paper in subject.allowed_papers %}
+                                <li class="list-row paper">
+                                    <div class="text-2xl font-thin opacity-30 tabular-nums">
+                                        {{ paper.number }}
+                                    </div>
+                                    <div class="list-col-grow">
+                                        <div>{{ paper.get_full_name }}</div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<script>
+		const subjectsData = {
+		    level: "O"
+		};
+	</script>
+</c-management>
