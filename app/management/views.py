@@ -105,7 +105,31 @@ class ManagementClassesView(View):
             
             return render(request, 'management/fragments/stream-card.html', {"stream": stream, "teachers": teachers})
     
-    
+
+class ManagementSubjectsView(View):
+    template_name = 'management/subjects.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        school = user.get_school()
+        subjects = Subject.objects.get_for_school(school)
+        levels = [
+            {
+                'code': 'O',
+                'name': 'Ordinary',
+                'subjects': subjects.filter(level='O')
+            },
+            {
+                'code': 'A',
+                'name': 'Advanced',
+                'subjects': subjects.filter(level='A')
+            }
+        ]
+        context = {
+            'school': school,
+            'levels': levels
+        }
+        return render(request, self.template_name, context)
     
 
 class SubjectsSetupView(View):
@@ -114,30 +138,6 @@ class SubjectsSetupView(View):
     def get(self, request, *args, **kwargs):
         user = request.user
         school = user.get_school()
-        
-        with transaction.atomic():
-            papers = school.paper_group.papers.all()
-            all_base_subjects = Subject.objects.get_base().prefetch_related('papers')
-        
-        
-        school_subjects = Subject.objects.from_papers(papers)
-        
-        levels = [
-            {
-                'code': 'O',
-                'name': 'Ordinary',
-                'subjects': school_subjects.filter(level='O')
-            },
-            {
-                'code': 'A',
-                'name': 'Advanced',
-                'subjects': school_subjects.filter(level='A')
-            }
-        ]
 
-
-        context = {
-            'levels': levels,
-            'all_base_subjects': all_base_subjects,
-        }
+        context = {}
         return render(request, self.template_name, context)
