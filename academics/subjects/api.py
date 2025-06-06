@@ -7,7 +7,7 @@ from ninja import Router
 from ninja.security import django_auth
 
 from .models import SchoolPapersGroup, Paper, SchoolPaperAssignment, Subject
-from .schemas import PaperIdSchema, PaperSchema, PaperRegistrationInSchema, SchoolPaperAssignmentSchema, CreateSchoolPapersGroupSchema, SubjectPapersSchema
+from .schemas import PaperSchema, PaperRegistrationInSchema, SchoolPaperAssignmentSchema, SubjectPapersSchema
 
 subjects_router = Router(auth=django_auth)
 
