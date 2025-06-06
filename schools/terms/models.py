@@ -46,6 +46,9 @@ class Term(models.Model):
     
     def get_days_left(self):
         return (self.end_date - timezone.now().date()).days
+    
+    def get_display_name(self):
+        return f"Term {self.number}"
 
 
 class TermFee(models.Model):

@@ -31,4 +31,7 @@ class Stream(models.Model):
     def get_enrollments(self):
         return self.enrollments.filter(term__active=True)
     
+    def get_full_name(self):
+        return f"S.{self.current_class.number} {self.name}"
+    
 
