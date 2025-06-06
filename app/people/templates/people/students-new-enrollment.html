@@ -1,0 +1,211 @@
+<c-people title="Students">
+	<div x-data="studentsData" class="grid gap-4">
+		<div class="overflow-x-auto">
+			<table class="table w-full bg-base-100 rounded-lg">
+				<thead>
+					<tr class="">
+						<th><span class="icon-info"></span></th>
+						<th class="">First Name</th>
+						<th class="">Middle Name</th>
+						<th class="">Last Name</th>
+						<th class="">Gender</th>
+						<th class="">Payment Code</th>
+						<th class="">LIN</th>
+						<th class="">Class</th>
+						<th class="">Stream</th>
+					</tr>
+				</thead>
+				<tbody x-ref="student_table_body">
+					<template x-ref="student_template">
+						<tr data-status="unsaved" class="unsaved">
+							<td>
+								<div class="tooltip tooltip-right status" data-tip="Unsaved"></div>
+							</td>
+							<td>
+								<input type="text" class="table-input w-full min-w-[5ch]" name="first_name"
+									placeholder="First" />
+							</td>
+							<td>
+								<input type="text" class="table-input w-full min-w-[5ch]" name="middle_name"
+									placeholder="Middle" />
+							</td>
+							<td>
+								<input type="text" class="table-input w-full min-w-[5ch]" name="last_name"
+									placeholder="Last" />
+							</td>
+							<td>
+								<select name="gender" class="table-select w-full min-w-[7ch]">
+									<option value="F">Female</option>
+									<option value="M">Male</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" class="table-input w-full min-w-[10ch]" name="payment_code"
+									placeholder="Payment Code" />
+							</td>
+							<td>
+								<input type="text" class="table-input w-full min-w-[8ch]" name="lin"
+									placeholder="LIN" />
+							</td>
+							<td>
+								<select name="class" class="table-select w-full min-w-[8ch]"
+									@change="generateOptions($el)">
+									<option value="">--</option>
+									{% for class in classes %}
+									<option value="{{ class.pk }}">{{ class.get_name }}</option>
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<select name="stream" class="table-select w-full min-w-[8ch]">
+									<option value="">--</option>
+								</select>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</div>
+		<div class="flex gap-4">
+			<button type="button" class="btn btn-neutral" @click="addStudentRow()">
+				<span class="icon-plus"></span>
+				<span>Add Student</span>
+			</button>
+			<button type="button" class="btn btn-primary" @click="handleSave()">
+				<span class="icon-save"></span>
+				<span>Save</span>
+			</button>
+		</div>
+	</div>
+
+	<style>
+		.table-select,
+		.table-input {
+			&:focus-within {
+				outline: none;
+			}
+		}
+
+		td:focus-within {
+			border: 1px var(--color-base-content) solid;
+		}
+	</style>
+
+	<script>
+		const studentsData = {
+			classes: [],
+
+			newStudent: {
+				first_name: "",
+				last_name: "",
+				middle_name: "",
+				gender: "",
+				payment_code: "",
+				lin: "",
+				term: 0,
+				class_for: 0,
+				stream_for: 0,
+			},
+
+			generateOptions(element) {
+				const select = element.parentElement.nextElementSibling.firstElementChild
+				const value = element.value
+				const cls = this.getClassById(value)
+				const options = this.generateSelectOptions(cls.school_streams)
+				let empty = `<option value="">--</option>`
+				let template = empty + options.join('')
+				select.innerHTML = template
+			},
+			getClassById(id) {
+				return this.classes.find(c => c.id == id)
+			},
+
+			generateSelectOptions(streams) {
+				return streams.map(s => `<option value="${s.id}">${s.name}</option>`)
+			},
+
+			addStudentRow() {
+				const template = this.$refs.student_template
+				const clone = template.content.cloneNode(true)
+				this.$refs.student_table_body.appendChild(clone)
+
+				setTimeout(() => {
+					const lastRow = this.$refs.student_table_body.lastElementChild;
+					const firstInput = lastRow.querySelector('input');
+					if (firstInput) firstInput.focus();
+				}, 0);
+			},
+
+			async handleSave() {
+				const rows = this.$refs.student_table_body.querySelectorAll('tr.unsaved');
+				let count = 0
+				const students = Array.from(rows).map(row => {
+					const inputs = row.querySelectorAll('input');
+					const selects = row.querySelectorAll('select');
+					const new_student = {
+						index: count++,
+						student: {
+							first_name: inputs[0].value,
+							middle_name: inputs[1].value,
+							last_name: inputs[2].value,
+							gender: selects[0].value,
+							payment_code: inputs[3].value,
+							lin: inputs[4].value,
+							term: Number("{{ current_term.pk }}"),
+							class_for: Number(selects[1].value),
+							stream_for: Number(selects[2].value),
+						}
+					}
+					return new_student
+				})
+				this.handleSubmit(students, rows)
+			},
+
+			async handleSubmit(students, rows){
+				let students_to_submit = []
+				// console.log(students)
+				students.forEach(student => {
+					students_to_submit.push(student.student)
+				});
+				// console.log(students_to_submit)
+
+				if (students_to_submit.length == 0) {
+					return
+				}
+				// console.log("submitting", students_to_submit)
+				response = await this.submit(students_to_submit)
+
+				if (response.ok) {
+					rows.forEach(row => {
+						let tooltip = row.querySelector('.tooltip')
+						tooltip.classList.add('tooltip-success')
+						tooltip.classList.remove('tooltip-error')
+						tooltip.setAttribute('data-tip', 'Saved')
+						row.setAttribute('data-status', 'saved')
+						row.classList.remove('unsaved')
+					})
+
+					const data = await response.json()
+					console.log("response", data)
+					return
+				}
+				console.error("response", response)
+			},
+
+			async submit(data) {
+				const response = await POST("{% url 'api:new_student_enrollment' %}", data, true)
+				return response
+			},
+
+
+			async getClasses() {
+				const response = await GET("{% url 'api:get_school_classes' %}")
+				this.classes = response
+			},
+
+			init() {
+				this.getClasses()
+			}
+		}
+	</script>
+</c-people>
