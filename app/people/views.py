@@ -3,6 +3,8 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
+from academics.classes.models import Class
+
 
 User = get_user_model()
 
@@ -57,5 +59,27 @@ class StudentsManagementView(View):
             'current_term': current_term,
             'enrollments': enrollments,
             'non_enrolled_students': non_enrolled_students,
+        }
+        return render(request, self.template_name, context)
+
+
+class StudentsNewEnrollmentsView(View):
+    template_name = 'people/students-new-enrollment.html'
+
+    def get(self, request, *args, **kwargs):
+        # get active term for which this today is in 
+        user = request.user
+        school = user.get_school()
+        current_term = school.terms.filter(active=True).first()
+        school = request.user.get_school()
+        streams = school.streams.all()
+        classes = Class.objects.all()
+
+        for cls in classes:
+            cls.school_streams = streams.filter(current_class=cls)
+
+        context = {
+            'current_term': current_term,
+            'classes': classes,
         }
         return render(request, self.template_name, context)
