@@ -38,10 +38,17 @@
             </a>
 		</div>
 		<div class="flex lg:flex-1 lg:justify-end">
+			{% if request.user.isAuthenticated %}
+			<a href="{% url 'pages:landing' %}"
+				class="btn btn-neutral">
+				Dashboard <span class="icon-arrow-right"></span>
+			</a>
+			{% else %}
 			<a href="{% url 'accounts:login' %}"
 				class="btn btn-neutral">
 				Login <span class="icon-log-in"></span>
 			</a>
+			{% endif %}
 		</div>
 		<div class="lg:hidden">
 			<button
