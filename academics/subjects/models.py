@@ -108,6 +108,10 @@ class Subject(models.Model):
     class Meta:
         verbose_name = _("Subject")
         verbose_name_plural = _("Subjects")
+        
+        permissions = [
+            ("can_manage_all_subjects", "Can manage all subjects"),
+        ]
 
     def __str__(self):
         return self.name
@@ -157,6 +161,7 @@ class SchoolPaperAssignment(models.Model):
         unique_together = (('school_papers_group', 'paper'),)
         verbose_name = _('School Paper Assignment')
         verbose_name_plural = _('School Paper Assignments')
+        
 
     def __str__(self):
         return f"{self.paper} ({'Compulsory' if self.is_compulsory else 'Optional'}) - {self.get_level_display()}"

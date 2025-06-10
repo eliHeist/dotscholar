@@ -106,6 +106,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     # REQUIRED_FIELDS = ['email']
 
     objects = UserManager()
+    
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        
+        permissions = [
+            ("has_teacher_role", "Has Teacher Role"),
+        ]
 
     def __str__(self):
         return self.username or self.email

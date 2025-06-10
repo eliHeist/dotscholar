@@ -39,9 +39,9 @@ class NavView(UnicornView):
             "permissions": [],
             "links": [
                 {
-                    "title": "Students",
-                    "icon": "icon-house",
-                    "url": "students:student-list",
+                    "title": "Classes",
+                    "icon": "icon-house-plug",
+                    "url": "academics:classes",
                     "permissions": [],
                 },
             ],

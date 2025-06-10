@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from academics.classes.models import Class
 from subscriptions.tiers.models import Tier
 
 
@@ -43,6 +44,17 @@ class School(models.Model):
         Returns the active term for the school.
         """
         return self.terms.filter(active=True).first()
+    
+    def get_classes(self):
+        
+        return Class.objects.all()
+        
+    def get_classes(self):
+        
+        classes = Class.objects.all()
+        for class_ in classes:
+            class_.matched_streams = class_.get_streams(self)
+        return classes
 
 
     

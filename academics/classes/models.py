@@ -10,6 +10,11 @@ class LevelChoices(models.TextChoices):
 class Class(models.Model):
     level = models.CharField(max_length=1, choices=LevelChoices.choices)
     number = models.CharField(max_length=1, choices=[(str(i), str(i)) for i in range(1, 8)], unique=True)
+    
+    class Meta:
+        permissions = [
+            ('can_manage_classes', 'Can manage classes'),
+        ]
 
     def __str__(self):
         return f"S.{self.number}"
