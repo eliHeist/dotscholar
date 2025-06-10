@@ -1,11 +1,15 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from academics.classes.models import Class
+from academics.subjects.models import Paper, Subject
+from schools.streams.models import Stream
 
 
 User = get_user_model()
 
-# Create your models here.
+
 class TeacherManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_teacher=True)
@@ -39,5 +43,23 @@ class Teacher(User):
         Returns all subjects taught by the teacher.
         """
         return 0
+
+
+class TeachingAssignment(models.Model):
+
+    teacher = models.ForeignKey(Teacher, verbose_name=_("Teacher"), on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, verbose_name=_("Subject"), on_delete=models.CASCADE)
+    papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), blank=True, related_name="teaching_assignments")
+    class_group = models.ForeignKey(Class, verbose_name=_("Class"), on_delete=models.CASCADE, related_name="teaching_assignments")
+    streams = models.ManyToManyField(Stream, verbose_name=_("Streams"), blank=True, related_name="teaching_assignments")
+    
+    modified = models.DateTimeField(_("Modified"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("teaching assignment")
+        verbose_name_plural = _("teaching assignments")
+
+    def __str__(self):
+        return self.teacher
 
 

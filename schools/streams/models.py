@@ -1,11 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from academics.classes.models import Class
 from schools.schools.models import School
-from people.teachers.models import Teacher
 
-# Create your models here.
+
+User = get_user_model()
+
 class Stream(models.Model):
 
     name = models.CharField(_("Name"), max_length=50, null=True, blank=True)
@@ -13,7 +15,7 @@ class Stream(models.Model):
     current_class = models.ForeignKey(Class, verbose_name=_("Class"), related_name="streams", on_delete=models.CASCADE)
 
     class_teacher = models.ForeignKey(
-        Teacher, 
+        User, 
         verbose_name=_("Current Class Teacher"), 
         related_name="streams", 
         on_delete=models.SET_NULL, 
