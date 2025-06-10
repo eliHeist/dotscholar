@@ -44,16 +44,12 @@ class School(models.Model):
         Returns the active term for the school.
         """
         return self.terms.filter(active=True).first()
-    
-    def get_classes(self):
-        
-        return Class.objects.all()
         
     def get_classes(self):
         
         classes = Class.objects.all()
         for class_ in classes:
-            class_.matched_streams = class_.get_streams(self)
+            class_.school_streams = class_.get_streams(self)
         return classes
 
 

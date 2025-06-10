@@ -15,3 +15,15 @@ class ClassesAcademicsView(LoginRequiredMixin, View):
             "classes": classes
         }
         return render(request, self.template_name, context)
+
+
+class ClassSubjectsView(View):
+    def get(self, request, class_pk, *args, **kwargs):
+        school = request.user.get_school()
+        class_ = school.get_classes().get(pk=class_pk)
+        
+        template_name = 'academics/class-subjects.html'
+        context = {
+            "class": class_,
+        }
+        return render(request, template_name, context)
