@@ -7,26 +7,12 @@
 		</div>
 		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
 			{% for class in classes %}
+			{% if class.stream_assignments %}
 			<ul class="list bg-base-100 rounded-box shadow-md">
 				<li class="p-4 pb-2 font-semibold opacity-60 flex justify-between items-center">
 					<span>{{ class.get_name }}</span>
-					<button class="btn btn-sm btn-square btn-ghost">
-						<svg
-							class="size-[1.2em]"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24">
-							<g
-								stroke-linejoin="round"
-								stroke-linecap="round"
-								stroke-width="2"
-								fill="none"
-								stroke="currentColor">
-								<path d="M6 3L20 12 6 21 6 3z"></path>
-							</g>
-						</svg>
-					</button>
 				</li>
-				{% for stream in class.school_streams %}
+				{% for stream in class.stream_assignments %}
 				<li class="list-row">
 					<div class="text-3xl font-thin opacity-30 tabular-nums">{{ forloop.counter }}</div>
 					<div class="list-col-grow items-center grid">
@@ -53,6 +39,7 @@
 				</li>
 				{% endfor %}
 			</ul>
+			{% endif %}
 			{% endfor %}
 		</div>
 	</div>
