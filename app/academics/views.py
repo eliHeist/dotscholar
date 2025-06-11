@@ -50,4 +50,23 @@ class ClassesAcademicsView(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
-
+class ClassAssessmentsView(View):
+    template_name = "academics/class-assessments.html"
+    def get(self, request, class_pk):
+        school = request.user.get_school()
+        cls = Class.objects.get(pk=class_pk)
+        
+        user = request.user
+        teacher_object = Teacher.objects.get(pk=user.pk)
+        assignments = teacher_object.teaching_assignments.all()
+        
+        subjects = set()
+        for assignment in assignments:
+            subjects.add(assignment.subject)
+        
+        context = {
+            "subjects": subjects,
+            "class": cls,
+            "term": school.get_active_term()
+        }
+        return render(request, self.template_name, context)
