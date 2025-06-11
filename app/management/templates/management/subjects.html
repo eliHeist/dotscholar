@@ -21,14 +21,17 @@
                 </a>
             </div>
         </div>
-		<div class="grid gap-4 flex-1">
+		<div class="flex-1">
 			{% for level in levels %}
 			<div x-show="level == '{{ level.code }}'">
-				<div class="subjects">
+				<div class="subjects grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {% for subject in level.subjects %}
                     <div class="card bg-base-200">
                         <div class="card-body">
-                            <h2 class="card-header">{{ subject.name }}</h2>
+                            <h2 class="card-header flex justify-between">
+                                <a href="{% url 'management:subject' subject.pk %}">{{ subject.name }}</a>
+                                <a href="{% url 'management:subject' subject.pk %}"><span class="icon-arrow-right"></span></a>
+                            </h2>
                             <ul class="list bg-base-100 rounded-box">
                                 <li class="p-4 pb-2 text-sm opacity-60 tracking-wide">Papers</li>
                                 {% for paper in subject.allowed_papers %}
