@@ -1,18 +1,19 @@
 import json
-from django.db import transaction
+import urllib
+
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-import urllib
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from academics.classes.models import Class
 from academics.subjects.models import Paper, Subject
-from people.teachers.models import Teacher
+from people.teachers.models import Teacher, TeachingAssignment
 from schools.streams.models import Stream
 from schools.terms.models import Term
 
 
-class ManagementOverview(View):
+class ManagementOverview(LoginRequiredMixin, View):
     template_name = 'management/overview.html'
 
     def get(self, request, *args, **kwargs):
@@ -26,7 +27,7 @@ class ManagementOverview(View):
         return render(request, self.template_name, context)
 
 
-class ManagementTermsView(View):
+class ManagementTermsView(LoginRequiredMixin, View):
     template_name = 'management/terms.html'
 
     def get(self, request, *args, **kwargs):
@@ -40,7 +41,7 @@ class ManagementTermsView(View):
         return render(request, self.template_name, context)
 
 
-class ManagementClassesView(View):
+class ManagementClassesView(LoginRequiredMixin, View):
     template_name = 'management/classes.html'
 
     def get(self, request, *args, **kwargs):
@@ -106,7 +107,7 @@ class ManagementClassesView(View):
             return render(request, 'management/fragments/stream-card.html', {"stream": stream, "teachers": teachers})
     
 
-class ManagementSubjectsView(View):
+class ManagementSubjectsView(LoginRequiredMixin, View):
     template_name = 'management/subjects.html'
 
     def get(self, request, *args, **kwargs):
@@ -130,9 +131,91 @@ class ManagementSubjectsView(View):
             'levels': levels
         }
         return render(request, self.template_name, context)
-    
 
-class SubjectsSetupView(View):
+
+class ManageSubjectView(LoginRequiredMixin, View):
+    template_name = 'management/subject.html'
+    
+    def redirect(self, subject_pk):
+        return redirect(reverse_lazy("management:subject", kwargs={"subject_pk":subject_pk}))
+
+    def get(self, request, subject_pk, *args, **kwargs):
+        user = request.user
+        school = user.get_school()
+        subject = Subject.objects.get(pk=subject_pk)
+        papers = school.paper_group.papers.all().filter(subject=subject)
+
+        level = subject.level
+        # classes = subject.classes.all()
+
+        level_classes = school.get_bare_classes().filter(level=level)
+
+        for cls in level_classes:
+            cls.school_streams = cls.get_streams(school)
+            for school_stream in cls.school_streams:
+                school_stream.teaching_assignment = school_stream.teaching_assignments.filter(
+                    school=school, subject=subject
+                ).first()
+                print(school_stream)
+                print(school_stream.teaching_assignment)
+        
+        teachers = Teacher.objects.filter(school=school)
+
+        context = {
+            "subject": subject,
+            "papers": papers,
+            "all_classes": level_classes,
+            "teachers": teachers,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, subject_pk, *args, **kwargs):
+        user = request.user
+        school = user.get_school()
+        subject = Subject.objects.get(pk=subject_pk)
+
+        data = request.POST
+        
+        pk = data.get('pk', 0)
+        teacher_ids = data.getlist('teachers', None)
+        stream_id = data.get('stream_pk', None)
+        
+        if not stream_id or len(teacher_ids) == 0:
+            return self.redirect(subject_pk)
+        
+        if pk == '':
+            pk = None
+        
+        print(pk, teacher_ids, stream_id)
+        
+        stream = Stream.objects.get(pk=stream_id)
+        teachers = Teacher.objects.filter(id__in=teacher_ids)
+
+
+        if not pk:
+            assignment = TeachingAssignment.objects.create(
+                school=school,
+                subject=subject,
+                stream=stream
+            )
+            print("created")
+        else:
+            assignment = TeachingAssignment.objects.get(pk=int(pk))
+            print("Matched")
+            
+        
+        print(assignment.teachers.all())
+        print(teachers)
+
+        assignment.teachers.set(teachers)
+        assignment.save()
+        print("After save")
+        print(assignment.teachers.all())
+        
+        return self.redirect(subject_pk)
+
+
+class SubjectsSetupView(LoginRequiredMixin, View):
     template_name = 'management/subjects_setup.html'
 
     def get(self, request, *args, **kwargs):
