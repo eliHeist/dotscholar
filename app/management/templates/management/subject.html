@@ -1,0 +1,37 @@
+<c-management title="Subjects">
+	<div x-data="subjectsData" class="flex gap-4">
+		<div>
+			<div class="card bg-base-100">
+				<div class="card-body">
+					<h1 class="text-2xl">{{ subject.name }}</h1>
+					<ul class="">
+						<li class="">
+							<span>Code:</span>
+							<span class="font-semibold">{{ subject.code }}</span>
+						</li>
+					</ul>
+					<ul class="list -mx-4">
+						<li class="px-4 mt-4 text-xs opacity-60 tracking-wide">Papers</li>
+						{% for paper in papers %}
+						<li class="list-row">
+							<div class="text- font-thin opacity-30 tabular-nums">{{ paper.number }}</div>
+							<div class="list-col-grow">{{ paper.get_full_name }}</div>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="flex-1 grid gap-4 lg:grid-cols-2">
+			{% for class in all_classes %}
+			{% include 'management/fragments/class-assignments-card.html' %}
+			{% endfor %}
+		</div>
+	</div>
+
+	<script>
+		const subjectsData = {
+			level: "O",
+		}
+	</script>
+</c-management>

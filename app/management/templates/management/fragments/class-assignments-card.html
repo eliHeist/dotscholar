@@ -1,0 +1,42 @@
+<ul class="card bg-base-100 rounded-box shadow-md" id="class-{{ class.pk }}">
+    <div class="card-body">
+        <li class="card-header">{{ class.get_name }}</li>
+    
+        {% for stream in class.school_streams %}
+        <li class="">
+            <form method="post" x-target="class-{{ class.pk }}">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value="{{ stream.teaching_assignment.pk }}">
+                <input type="hidden" name="stream_pk" value="{{ stream.pk }}">
+                <ul class="list -mx-4">
+                    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">{{ stream.name }}</li>
+                    {% for teacher in teachers %}
+                    <li class="list-row">
+                        <div class="list-col-grow">
+                            <label for="teacher-{{ teacher.pk }}">
+                                <input type="checkbox" class="checkbox" name="teachers" id="teacher-{{ teacher.pk }}" value="{{ teacher.pk }}" {% if teacher in stream.teaching_assignment.teachers.all %}checked{% endif %}>
+                                <span>{{ teacher.get_full_name }}</span>
+                            </label>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    <div class="list-row">
+                        <button class="btn btn-sm">
+                            <span class="icon-save"></span>
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </ul>
+            </form>
+        </li>
+        {% empty %}
+        <li class="">
+            <div class="text-4xl font-thin opacity-30 tabular-nums">00</div>
+            <div class="list-col-grow">
+                <div>No Streams yet</div>
+                <div class="text-xs uppercase font-semibold opacity-60">Add streams in management tab</div>
+            </div>
+        </li>
+        {% endfor %}
+    </div>
+</ul>
