@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from academics.classes.models import Class
 from academics.subjects.models import Paper, Subject
+from schools.schools.models import School
 from schools.streams.models import Stream
 
 
@@ -47,19 +48,19 @@ class Teacher(User):
 
 class TeachingAssignment(models.Model):
 
-    teacher = models.ForeignKey(Teacher, verbose_name=_("Teacher"), on_delete=models.CASCADE)
+    school = models.ForeignKey(School, verbose_name=_("School"), on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, verbose_name=_("Subject"), on_delete=models.CASCADE)
-    papers = models.ManyToManyField(Paper, verbose_name=_("Papers"), blank=True, related_name="teaching_assignments")
-    class_group = models.ForeignKey(Class, verbose_name=_("Class"), on_delete=models.CASCADE, related_name="teaching_assignments")
-    streams = models.ManyToManyField(Stream, verbose_name=_("Streams"), blank=True, related_name="teaching_assignments")
+    teachers = models.ManyToManyField(Teacher, verbose_name=_("Teacher"), related_name="teaching_assignments")
+    stream = models.ForeignKey(Stream, verbose_name=_("Streams"), on_delete=models.CASCADE, blank=True, related_name="teaching_assignments")
     
     modified = models.DateTimeField(_("Modified"), auto_now=True)
 
     class Meta:
         verbose_name = _("teaching assignment")
         verbose_name_plural = _("teaching assignments")
+        unique_together = ("subject", "school", "stream")
 
     def __str__(self):
-        return self.teacher
+        return f"{self.school} - {self.subject} - {self.stream}"
 
 

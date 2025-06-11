@@ -27,23 +27,17 @@ class School(models.Model):
         return self.name
     
     def get_subjects_group(self):
-        """
-        Returns the subject group for the school using the related name 'subject_group'.
-        Returns None if it does not exist.
-        """
         return getattr(self, 'paper_group', None)
     
     def get_teachers(self):
-        """
-        Returns all teachers associated with the school.
-        """
         return self.users.filter(is_teacher=True)
     
     def get_active_term(self):
-        """
-        Returns the active term for the school.
-        """
         return self.terms.filter(active=True).first()
+        
+    def get_bare_classes(self):
+        
+        return Class.objects.all()
         
     def get_classes(self):
         
