@@ -1,0 +1,276 @@
+{% load widget_tweaks %}
+
+<c-layout title="Classes Academics">
+    <div class="px-4" x-data="clsacc_data">
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a href="{% url 'academics:classes' %}">Classes</a></li>
+                <li><a>{{ class.get_name }}</a></li>
+                <li><a>Assessments</a></li>
+            </ul>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="assessments">
+            {% for assessment in assessments %}
+            <div class="card bg-base-100" data-subject="{{ assessment.subject.pk }}"
+                data-order="{{ assessment.order }}">
+                <div class="card-body">
+                    <div class="badge badge-sm badge-soft uppercase {% if assessment.kind == CA %}badge-neutral{% else %}badge-primary{% endif %}">
+                        {{ assessment.get_kind_display }}
+                    </div>
+                    <div class="card-header">
+                        <h2 class="card-title">{{ assessment.title }}</h2>
+
+                        {% if assessment.date %}
+                        <p class="text-xs opacity-60">{{ assessment.date }}</p>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-lg">{{ assessment.competency }}</p>
+
+                    <ul class="list -mx-4">
+                        <li class="list-row">
+                            <div class="flex gap-6 justify-between">
+                                <div>Subject:</div>
+                            </div>
+                            <div class="text-end list-col-grow">
+                                <div>{{ assessment.subject.name }}</div>
+                                <div>{{ assessment.subject.code }}</div>
+                            </div>
+                        </li>
+                        <li class="list-row">
+                            <div class="flex gap-6 justify-between">
+                                <div>Max mark:</div>
+                            </div>
+                            <div class="text-end list-col-grow">
+                                <div>{{ assessment.total_mark }}</div>
+                            </div>
+                        </li>
+                        <li class="px-4 mt-4">
+                            <div class="opacity-60 uppercase font-semibold">Papers Covered</div>
+                        </li>
+                        {% for paper in assessment.papers.all %}
+                        <li class="list-row">
+                            <div class="flex gap-6 justify-between">
+                                <div>{{ paper.get_paper_code }}</div>
+                            </div>
+                            <div class="text-end list-col-grow">
+                                <div>{{ paper.get_full_name }}</div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex gap-4 mt-4">
+            <button class="btn btn-neutral" onclick="new_assessment_modal.showModal()">
+                <span class="icon-plus"></span>
+                Add an Assignment
+            </button>
+            <dialog id="new_assessment_modal" class="modal">
+                <div class="modal-box relative @container">
+                    <h3 class="text-lg font-bold text-center">Create an Assessment</h3>
+                    <div class="steps w-full mb-8">
+                        <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 0 }"
+                            @click="step = 0">
+                            Basics
+                        </button>
+                        <button type="button" class="step text-sm" :class="{ 'step-primary': step >= 1 }"
+                            @click="step = 1">
+                            Advanced
+                        </button>
+                    </div>
+
+                    <form method="post" x-ref="assignments_form" @submit="(event) => handleSubmit(event)" x-target="assessments">
+                        {% csrf_token %}
+                        <input type="hidden" name="cls" value="{{ class.pk }}" required />
+                        <input type="hidden" name="term" value="{{ term.pk }}" required />
+                        <input type="hidden" name="order" :value="next_order" required />
+
+                        <div x-cloak x-show="step == 1">
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.kind.id_for_label }}">{{ form.kind.label }} *</label>
+                                </legend>
+                                {{ form.kind|add_class:"select w-full" }}
+                                <div class="label text-error">{{ form.kind.errors }}</div>
+                                <p class="label">{{ form.kind.help_text }}</p>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.date.id_for_label }}">Date</label>
+                                </legend>
+                                {{ form.date|add_class:"input w-full"|attr:"type:date" }}
+                                <div class="label text-error">{{ form.date.errors }}</div>
+                                <p class="label">{{ form.date.help_text }}</p>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} *</label>
+                                </legend>
+                                <select name="subject" id="{{ form.subject.id_for_label }}" class="select w-full"
+                                    @change="generateOptions($el)" required>
+                                    <option value="">----</option>
+                                    {% for subject in subjects %}
+                                    <option value="{{ subject.pk }}">
+                                        {{ subject.code }}: {{ subject.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="label text-error">{{ form.subject.errors }}</div>
+                                <p class="label">{{ form.subject.help_text }}</p>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.papers.id_for_label }}">{{ form.papers.label }} *</label>
+                                </legend>
+                                <div class="grid" x-ref="paper_options">
+                                    <label class="label">
+                                        <input type="checkbox" class="checkbox" value="" />
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="label text-error">{{ form.papers.errors }}</div>
+                                <p class="label">{{ form.papers.help_text }}</p>
+                            </fieldset>
+
+                            <div class="flex justify-end">
+                                <button type="button" class="btn btn-ghost" @click="step--">
+                                    <span class="icon-arrow-left"></span> Previous
+                                </button>
+                                <button class="btn btn-primary">
+                                    Save <span class="icon-save"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div x-cloak x-show="step == 0">
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.title.id_for_label }}">{{ form.title.label }} *</label>
+                                </legend>
+                                {{ form.title|add_class:"input w-full" }}
+                                <div class="label text-error">{{ form.title.errors }}</div>
+                                <p class="label">{{ form.title.help_text }}</p>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.competency.id_for_label }}">{{ form.competency.label }}</label>
+                                </legend>
+                                {{ form.competency|add_class:"textarea w-full" }}
+                                <div class="label text-error">{{ form.competency.errors }}</div>
+                                <p class="label">{{ form.competency.help_text }}</p>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">
+                                    <label for="{{ form.total_mark.id_for_label }}">{{ form.total_mark.label }}
+                                        *</label>
+                                </legend>
+                                {{ form.total_mark|add_class:"input w-full" }}
+                                <div class="label text-error">{{ form.total_mark.errors }}</div>
+                                <p class="label">{{ form.total_mark.help_text }}</p>
+                            </fieldset>
+
+                            <div class="flex justify-end">
+                                <button type="button" class="btn btn-ghost btn-sm" @click="step++">
+                                    Next <span class="icon-arrow-right"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <button type="button" class="btn btn-sm btn-circle absolute right-2 top-2" onclick="new_assessment_modal.close()">
+                        <span class="icon-x"></span>
+                    </button>
+                </div>
+            </dialog>
+        </div>
+    </div>
+
+    <script>
+        clsacc_data = {
+            subjects: [// {% for subject in subjects %}
+                {
+                    id: Number("{{ subject.pk }}"),
+                    code: "{{ subject.code }}",
+                    name: "{{ subject.name }}",
+                    papers: [// {% for paper in subject.school_papers %}
+                        {
+                            id: Number("{{ paper.pk }}"),
+                            number: Number("{{ paper.number }}"),
+                            name: "{{ paper.get_full_name }}"
+                        },// {% endfor %}
+                    ]
+                },// {% endfor %}
+            ],
+
+            assessments: [],
+
+            step: 0,
+            next_order: null,
+
+            generateOptions(element) {
+                const value = element.value
+                const subjects = this.subjects.filter(obj => obj.id == Number(value))
+
+                const template = this.generatePaperOptions(subjects[0])
+
+                const container = this.$refs.paper_options
+                container.innerHTML = template
+
+                this.setOrder(subjects[0])
+            },
+            generatePaperOptions(subject) {
+                return subject.papers.map(paper => `<label class="label"><input type="checkbox" class="checkbox" value="${paper.id}" name="papers" /><span>${paper.number}: ${paper.name}</span></label>`)
+            },
+
+            setOrder(subject) {
+                const assessments = this.assessments.filter(ass => ass.subject_id == subject.id)
+
+                let order = 0
+                assessments.forEach((ass) => {
+                    if (Number(ass.order) > order) {
+                        order = Number(ass.order)
+                    }
+                })
+
+                this.next_order = order + 1
+            },
+
+            handleSubmit(event) {
+                const checkboxes = this.$refs.assignments_form.querySelectorAll('input[name="papers"]');
+                const checked = Array.from(checkboxes).some(cb => cb.checked);
+                if (!checked) {
+                    event.preventDefault();
+                    alert("Please select at least one paper.");
+                }
+                console.log("Submit now")
+                console.log(this.$refs.assignments_form)
+                // this.$refs.assignments_form.requestSubmit()
+            },
+
+            getAssessments() {
+                const cards = document.querySelectorAll('#assessments > *')
+
+                cards.forEach((card) => {
+                    const subject_id = card.getAttribute('data-subject')
+                    const order = card.getAttribute('data-order')
+
+                    this.assessments.push({ subject_id: subject_id, order: order })
+                })
+            },
+
+            init() {
+                this.getAssessments()
+            }
+        }
+    </script>
+</c-layout>

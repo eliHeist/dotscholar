@@ -1,12 +1,15 @@
-from django.shortcuts import render
-from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import View
 
+from academics.assessments.forms import AssessmentForm
+from academics.assessments.models import Assessment
 from academics.classes.models import Class
 from people.teachers.models import Teacher
 
 # Create your views here.
-class ClassSubjectsView(View):
+class ClassSubjectsView(LoginRequiredMixin, View):
     def get(self, request, class_pk, *args, **kwargs):
         school = request.user.get_school()
         class_ = school.get_classes().get(pk=class_pk)
@@ -50,23 +53,60 @@ class ClassesAcademicsView(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
-class ClassAssessmentsView(View):
+class ClassAssessmentsView(LoginRequiredMixin, View):
     template_name = "academics/class-assessments.html"
+
+    def redirect(self, class_pk):
+        return redirect(reverse_lazy("academics:assessments", kwargs={"class_pk":class_pk}))
+    
     def get(self, request, class_pk):
         school = request.user.get_school()
         cls = Class.objects.get(pk=class_pk)
+        term = school.get_active_term()
         
         user = request.user
         teacher_object = Teacher.objects.get(pk=user.pk)
         assignments = teacher_object.teaching_assignments.all()
         
+        all_papers = school.paper_group.papers.all()
+        
         subjects = set()
+        subject_ids = set()
         for assignment in assignments:
-            subjects.add(assignment.subject)
+            subject = assignment.subject
+            subject.school_papers = all_papers.filter(subject=subject)
+            subjects.add(subject)
+            subject_ids.add(subject.pk)
+        
+        
+        assessments = Assessment.objects.filter(subject_id__in=subject_ids, term=term, cls=cls)
+        
+        form = AssessmentForm()
         
         context = {
             "subjects": subjects,
             "class": cls,
-            "term": school.get_active_term()
+            "term": term,
+            "assessments": assessments,
+            "form": form
         }
         return render(request, self.template_name, context)
+    
+    def post(self, request, class_pk):
+        school = request.user.get_school()
+        cls = Class.objects.get(pk=class_pk)
+        term = school.get_active_term()
+        
+        print(request.POST)
+        
+        form = AssessmentForm(request.POST)
+        if form.is_valid():
+            assessment = form.save()
+            print(assessment)
+            # assessment.term = term
+            # assessment.cls = cls
+            # assessment.save()
+        else:
+            print(form.errors)
+            
+        return self.redirect(class_pk)
